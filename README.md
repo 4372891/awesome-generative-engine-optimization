@@ -1,5 +1,7 @@
 # Awesome Generative Engine Optimization - Open Source GEO Tools [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) 🚀
 
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
+
 A curated directory of open-source GEO tools. Built specifically for startups, consultants, and developers optimizing web infrastructure for LLMs, RAG systems, and AI search engines (ChatGPT, Perplexity, Gemini, Claude).
 
 ## 1. Technical GEO & Ingestion Infrastructure
