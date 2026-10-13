@@ -9,6 +9,6 @@ Tools to audit machine-readability, manage AI crawler access, and map corporate 
 Tools for optimizing vector embeddings, text chunking, and direct-answer layouts.
 
 ## 3. Trackers & Visibility Mentions
-- (Niubigeo)[https://github.com/Albert-Weasker/niubigeo]
+- [Niubigeo](https://github.com/Albert-Weasker/niubigeo)
 
 ---
