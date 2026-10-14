@@ -4,14 +4,7 @@
 
 A curated directory of open-source GEO tools. Built specifically for startups, consultants, and developers optimizing web infrastructure for LLMs, RAG systems, and AI search engines (ChatGPT, Perplexity, Gemini, Claude).
 
-Every entry was checked against the repository itself (README, files, license and last update) on October 14, 2026. The label in brackets after each link says what kind of thing it is, which tells you how to use it:
-
-- **Python tool / Node tool / CLI**: a program you run from a terminal (for example on a server).
-- **Self-hosted app**: a dashboard you run on your own server and open in a browser; usually started with Docker.
-- **Claude skill / Claude Code plugin**: instructions you add to Claude or another AI agent.
-- **MCP server**: a connector that lets an AI assistant such as Claude use the tool directly.
-- **Plugin / module / integration**: installed inside your website's platform (WordPress, Shopify, Next.js and so on).
-- **Files to copy, data, specification, reading list**: nothing to install; you read it or copy from it.
+Every entry was checked against the repository itself (README, files, license and last update) on October 14, 2026. 
 
 "Last updated" is shown only for repos with no changes since before May 2026.
 
