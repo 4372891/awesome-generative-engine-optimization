@@ -4,283 +4,301 @@
 
 A curated directory of open-source GEO tools. Built specifically for startups, consultants, and developers optimizing web infrastructure for LLMs, RAG systems, and AI search engines (ChatGPT, Perplexity, Gemini, Claude).
 
+Every entry was checked against the repository itself (README, files, license and last update) on October 14, 2026. The label in brackets after each link says what kind of thing it is, which tells you how to use it:
+
+- **Python tool / Node tool / CLI**: a program you run from a terminal (for example on a server).
+- **Self-hosted app**: a dashboard you run on your own server and open in a browser; usually started with Docker.
+- **Claude skill / Claude Code plugin**: instructions you add to Claude or another AI agent.
+- **MCP server**: a connector that lets an AI assistant such as Claude use the tool directly.
+- **Plugin / module / integration**: installed inside your website's platform (WordPress, Shopify, Next.js and so on).
+- **Files to copy, data, specification, reading list**: nothing to install; you read it or copy from it.
+
+"Last updated" is shown only for repos with no changes since before May 2026.
+
 ## 1. Technical GEO & Ingestion Infrastructure
- 
+
 ### 1a. AI crawler access & bot rules
- 
-- [ai-robots-txt/ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt): Community list of AI crawlers with ready-made robots.txt, .htaccess, Nginx, Caddy, and HAProxy configs. The standard starting point.
-- [ipanalytics/AI-Crawler-Blocklist](https://github.com/ipanalytics/ai-crawler-blocklist): AI crawler lists and firewall snippets from official operator sources, including verified IP lists and robots.txt presets (training opt-out, search-safe).
-- [josezuma/ai-crawlers](https://github.com/josezuma/ai-crawlers): Machine-readable dataset of AI crawler user agents with robots.txt recipes, verified weekly.
-- [henu-wang/ai-crawlers-reference](https://github.com/henu-wang/ai-crawlers-reference): Database of AI search crawler user agents with robots.txt examples.
-- [henu-wang/ai-robots-txt-generator](https://github.com/henu-wang/ai-robots-txt-generator): Generates robots.txt rules for GPTBot, PerplexityBot, ClaudeBot, and similar crawlers.
-- [GGeronik/consent-txt](https://github.com/GGeronik/consent-txt): Define AI permissions once; outputs robots.txt, AIPREF headers, X-Robots-Tag, and TDMRep rules.
-- [First-Point/ai-txt-skill](https://github.com/First-Point/ai-txt-skill): Claude Code skill that generates and audits ai.txt, robots.txt, llms.txt, and TDM opt-out files.
-- [lord-alfred/ipranges](https://github.com/lord-alfred/ipranges): Daily-updated IP ranges by provider, for confirming a "GPTBot" visit really comes from OpenAI.
-- [TecharoHQ/anubis](https://github.com/TecharoHQ/anubis): Proof-of-work reverse proxy that blocks scrapers while letting chosen crawlers through.
-- [samber/the-great-gpt-firewall](https://github.com/samber/the-great-gpt-firewall): Tracks which websites restrict AI crawlers.
+
+- [ai-robots-txt/ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt) (Files to copy): Community list of 184 AI crawlers with ready-made blocking files for robots.txt, Apache, Nginx, Caddy, HAProxy and lighttpd. Heads-up: its robots.txt blocks every listed bot, including the AI search bots that cite you (OAI-SearchBot, PerplexityBot, Claude-SearchBot), so treat it as a reference list rather than pasting it in as-is.
+- [ipanalytics/ai-crawler-blocklist](https://github.com/ipanalytics/ai-crawler-blocklist) (Data files): AI crawler blocklists and ready-to-use firewall snippets built only from the crawler operators' own published sources. It separates verified IP ranges (safe to hard-block) from user-agent-only rules, with presets that include a search-safe option.
+- [josezuma/ai-crawlers](https://github.com/josezuma/ai-crawlers) (Data list + Python tool): Machine-readable list (JSON/YAML) of AI crawler user agents with an example robots.txt, plus a small no-dependency Python tool to look them up.
+- [henu-wang/ai-crawlers-reference](https://github.com/henu-wang/ai-crawlers-reference) (Reference page): One-page table of about 10 major AI crawlers with their company and purpose (training vs search), plus robots.txt examples. Mostly points to the author's GEOScore website tools. Last updated March 2026.
+- [henu-wang/ai-robots-txt-generator](https://github.com/henu-wang/ai-robots-txt-generator) (Python script): Small script and copy-paste template that produce a robots.txt allowing the major AI search crawlers. Also promotes the author's GEOScore website. Last updated March 2026.
+- [GGeronik/consent-txt](https://github.com/GGeronik/consent-txt) (Spec + tools): Write your AI access policy once as a single JSON "consent manifest" and compile it into robots.txt, AIPREF headers, X-Robots-Tag, Google-Extended and TDMRep rules. Includes a Cloudflare Worker to enforce it, a scanner and a WordPress plugin.
+- [First-Point/ai-txt-skill](https://github.com/First-Point/ai-txt-skill) (Claude skill): Generates and audits robots.txt with AI user agents, ai.txt, llms.txt and the EU text-and-data-mining opt-out file. For example, it can block AI training while keeping ChatGPT and Perplexity search access.
+- [lord-alfred/ipranges](https://github.com/lord-alfred/ipranges) (Data files): Regularly updated IP address lists for Googlebot, Bing, OpenAI, Perplexity, major clouds and more, from public sources. Useful for checking whether a visitor claiming to be a known bot really is one.
+- [TecharoHQ/anubis](https://github.com/TecharoHQ/anubis) (Self-hosted app (Go)): Sits in front of your website and makes visitors pass a small computing challenge to stop floods of AI scrapers. The authors call it "a bit of a nuclear response" that can also block good bots, so for GEO it only makes sense if scrapers are overloading your server.
+- [samber/the-great-gpt-firewall](https://github.com/samber/the-great-gpt-firewall) (Data list): Monthly-updated list of websites whose robots.txt restricts AI crawlers. Handy for seeing which sites block which bots.
+
 ### 1b. AI crawler logs & bot traffic
- 
-- [siteline-ai/agent-analytics-skill](https://github.com/siteline-ai/agent-analytics-skill): Pulls AI bot visits from server logs, classifies 30+ bots, links them to AI referral traffic, and writes a recommendations report.
-- [PascaleBeier/hitkeep](https://github.com/PascaleBeier/hitkeep): Open-source, AI-native web analytics; self-hosted as one Go binary.
-- [stani-chirk/logwick](https://github.com/stani-chirk/logwick): Self-hosted server log analytics that classifies AI bots like GPTBot and ClaudeBot.
-- [surfacedby/ai-traffic-alerts-for-cloudflare](https://github.com/surfacedby/ai-traffic-alerts-for-cloudflare): Cloudflare Worker that alerts you when AI assistants send visitors or AI crawlers arrive.
-- [arturseo-geo/mcp-crawl-parity](https://github.com/arturseo-geo/mcp-crawl-parity): MCP server comparing Googlebot vs AI crawler behavior using Nginx logs and Search Console data.
-- [abbottis/logwerk](https://github.com/abbottis/logwerk): Offline-first server log analyzer dashboard that runs entirely in the browser.
-- [monteduro/laravel-datafast-aicrawl](https://github.com/monteduro/laravel-datafast-aicrawl): Server-side AI crawler tracking for Laravel apps.
-- [allinurl/goaccess](https://github.com/allinurl/goaccess): Real-time terminal log analyzer; shows which AI crawlers hit which URLs.
-- [matomo-org/device-detector](https://github.com/matomo-org/device-detector): User-agent parser with bot definitions for classifying crawler traffic.
+
+- [PascaleBeier/hitkeep](https://github.com/PascaleBeier/hitkeep) (Self-hosted app (Go)): Privacy-first web analytics in one program that treats AI as its own traffic channel: AI crawler fetches, visitors referred by AI assistants and Search Console data side by side. MIT.
+- [stani-chirk/logwick](https://github.com/stani-chirk/logwick) (Node app): Reads your server or CDN logs and sorts every request into real users, search crawlers, AI training scrapers and AI assistants fetching pages live, with a local dashboard. Your data stays on your machine. AGPL.
+- [surfacedby/ai-traffic-alerts-for-cloudflare](https://github.com/surfacedby/ai-traffic-alerts-for-cloudflare) (Cloudflare Worker): Sends a push notification to your phone when someone clicks through from a ChatGPT, Perplexity, Gemini or Claude answer, or when AI crawlers fetch your pages. Needs your site on Cloudflare; can be set up without a terminal.
+- [arturseo-geo/mcp-crawl-parity](https://github.com/arturseo-geo/mcp-crawl-parity) (MCP server (Node)): Lets an AI assistant analyze your Nginx logs to compare how Googlebot and AI crawlers crawl your site, cross-checked with Search Console data. Last updated March 2026.
+- [abbottis/logwerk](https://github.com/abbottis/logwerk) (Browser app): Drop an Nginx or Apache log file into a web page and see which of 70+ crawlers visited, by company and purpose (for example ChatGPT search vs training). Runs entirely in your browser; nothing is uploaded. Has a live demo.
+- [monteduro/laravel-datafast-aicrawl](https://github.com/monteduro/laravel-datafast-aicrawl) (Laravel package): Tracks AI crawler and bot visits on a Laravel site and reports them to the DataFast analytics service. Unofficial; relies on an undocumented DataFast endpoint.
+- [allinurl/goaccess](https://github.com/allinurl/goaccess) (Log analyzer (terminal + browser)): Long-established real-time web log analyzer that shows your traffic in the terminal or as a live HTML report. General-purpose, not AI-specific.
+- [matomo-org/device-detector](https://github.com/matomo-org/device-detector) (PHP library): Matomo's library that identifies devices, browsers and bots from user agents. A building block for developers, not a ready-to-run tool.
+
 ### 1c. llms.txt — spec, generators, directories
- 
-- [AnswerDotAI/llms-txt](https://github.com/AnswerDotAI/llms-txt): Home of the /llms.txt specification plus its reference parser and CLI tools.
-- [langchain-ai/mcpdoc](https://github.com/langchain-ai/mcpdoc): Serves llms.txt sources to IDEs and agents over MCP.
-- [thedaviddias/llms-txt-hub](https://github.com/thedaviddias/llms-txt-hub): Large directory of sites and tools that publish or implement llms.txt.
-- [firecrawl/create-llmstxt-py](https://github.com/firecrawl/create-llmstxt-py): Generates llms.txt and llms-full.txt for any website using Firecrawl and OpenAI. MIT.
-- [madarco/ragrabbit](https://github.com/madarco/ragrabbit): Self-hosted AI site search that also generates llms.txt from its index.
-- [mensfeld/llm-docs-builder](https://github.com/mensfeld/llm-docs-builder): Converts markdown docs into LLM/RAG-ready output and builds llms.txt automatically.
-- [thedaviddias/mcp-llms-txt-explorer](https://github.com/thedaviddias/mcp-llms-txt-explorer): MCP server for exploring websites that publish llms.txt.
-- [dotenvx/llmstxt](https://github.com/dotenvx/llmstxt): Turns an existing sitemap.xml into llms.txt with one npx command.
-- [apify/actor-llmstxt-generator](https://github.com/apify/actor-llmstxt-generator): Crawls a site and outputs llms.txt (Apify Actor).
-- [raphaelstolt/llms-txt-php](https://github.com/raphaelstolt/llms-txt-php): PHP library to write, read, and validate llms.txt.
-- [robbrad/llmstxt-generator-github-action](https://github.com/robbrad/llmstxt-generator-github-action): GitHub Action that builds llms.txt and llms-full.txt from markdown docs.
-- [josezuma/llmstxt-gen](https://github.com/josezuma/llmstxt-gen): CLI that generates llms.txt from any website.
-- [shimo4228/llms-txt-writer](https://github.com/shimo4228/llms-txt-writer): Claude Code skill that writes and checks llms.txt and FAQ docs against AI citation research.
-- [silverbackmarketing/ai-readiness](https://github.com/silverbackmarketing/ai-readiness): Generates 18 AI-readiness files (llms.txt, ai.txt, and more) from one command.
+
+- [AnswerDotAI/llms-txt](https://github.com/AnswerDotAI/llms-txt) (Spec + Python tool): Official home of the llms.txt proposal, with a Python library and command-line tool that read llms.txt files and turn them into context files for AI.
+- [langchain-ai/mcpdoc](https://github.com/langchain-ai/mcpdoc) (MCP server (Python)): Gives AI coding apps (Cursor, Windsurf, Claude Code and Desktop) access to the documentation listed in llms.txt files you choose, with strict domain controls. Aimed at developers reading docs, not at site audits.
+- [thedaviddias/llms-txt-hub](https://github.com/thedaviddias/llms-txt-hub) (Directory (website)): Large directory of websites and tools that publish or support llms.txt. Good for finding real examples.
+- [firecrawl/create-llmstxt-py](https://github.com/firecrawl/create-llmstxt-py) (Python script): Generates llms.txt and llms-full.txt for any website. Needs paid Firecrawl and OpenAI API keys. No license file. Last updated June 2025.
+- [madarco/ragrabbit](https://github.com/madarco/ragrabbit) (Self-hosted app (Node)): Crawls your site into a database and gives you an AI search and chat widget, an llms.txt generator and an MCP server. One-click Vercel deploy; needs PostgreSQL with pgVector and an OpenAI key. Last updated March 2025.
+- [mensfeld/llm-docs-builder](https://github.com/mensfeld/llm-docs-builder) (Ruby tool (Docker)): Converts documentation into lean, AI-friendly markdown (claims 67–95% fewer tokens) and builds llms.txt. Runs through Docker, so no Ruby setup needed.
+- [thedaviddias/mcp-llms-txt-explorer](https://github.com/thedaviddias/mcp-llms-txt-explorer) (MCP server (Node)): Lets an AI assistant check whether a website has llms.txt and llms-full.txt files and validate them. Last updated January 2026.
+- [dotenvx/llmstxt](https://github.com/dotenvx/llmstxt) (Node tool): One command turns your sitemap.xml into an llms.txt file. Last updated March 2026.
+- [apify/actor-llmstxt-generator](https://github.com/apify/actor-llmstxt-generator) (Apify app (Python)): Crawls a docs site and writes llms.txt (and optionally llms-full.txt), grouping pages into sections. Mainly run on the Apify platform: enter a URL and click Start.
+- [raphaelstolt/llms-txt-php](https://github.com/raphaelstolt/llms-txt-php) (PHP library): For PHP developers: create, read, validate and expand llms.txt files. A building block, not a standalone tool.
+- [robbrad/llmstxt-generator-github-action](https://github.com/robbrad/llmstxt-generator-github-action) (GitHub Action): Builds llms.txt and llms-full.txt from the markdown docs in a GitHub repository each time it runs. Last updated October 2025.
+- [josezuma/llmstxt-gen](https://github.com/josezuma/llmstxt-gen) (Node/Python tool): Generates llms.txt and llms-full.txt from any website, following the llmstxt.org spec. The README is very thin.
+- [shimo4228/llms-txt-writer](https://github.com/shimo4228/llms-txt-writer) (Claude skill): Writes and checks documents meant mainly for AI readers (llms.txt, llms-full.txt, FAQ pages, glossaries). A local script scores 5 GEO measures, such as how self-contained each section is, and Claude proposes small edits for you to approve. No API key needed.
+- [silverbackmarketing/ai-readiness](https://github.com/silverbackmarketing/ai-readiness) (Claude skill): Researches a website and generates a set of 17 "AI readiness" files for its root folder, including robots.txt, ai.txt, llms.txt, schema and RAG indexes, tailored to the business.
+
 ### 1d. llms.txt & AI-readiness plugins by platform
- 
-- [TurboDocx/next-plugin-llms](https://github.com/TurboDocx/next-plugin-llms) (Next.js): Scans the app directory and generates llms.txt and llms-full.txt.
-- [nuxt-content/nuxt-llms](https://github.com/nuxt-content/nuxt-llms) (Nuxt): Generates /llms.txt automatically from Nuxt content.
-- [harlan-zw/nuxt-seo](https://github.com/harlan-zw/nuxt-seo) (Nuxt): Structured data, meta, sitemaps, robots, and AEO coverage for Nuxt.
-- [okineadev/vitepress-plugin-llms](https://github.com/okineadev/vitepress-plugin-llms) (VitePress): llms.txt plus per-page markdown for VitePress sites.
-- [delucis/starlight-llms-txt](https://github.com/delucis/starlight-llms-txt) (Astro Starlight): llms.txt for Starlight documentation sites.
-- [tfmurad/astro-llms-md](https://github.com/tfmurad/astro-llms-md) (Astro): llms.txt, llms-full.txt, and per-page markdown.
-- [pawamoy/mkdocs-llmstxt](https://github.com/pawamoy/mkdocs-llmstxt) (MkDocs): Emits /llms.txt during the MkDocs build.
-- [ultralytics/mkdocs](https://github.com/ultralytics/mkdocs) (MkDocs): SEO metadata, JSON-LD, social cards, and llms.txt.
-- [jdillard/sphinx-llms-txt](https://github.com/jdillard/sphinx-llms-txt) (Sphinx): llms.txt for Sphinx documentation projects.
-- [WP-Autoplugin/llms-txt-for-wp](https://github.com/WP-Autoplugin/llms-txt-for-wp) (WordPress): Customizable llms.txt for WordPress.
-- [JonImmsWordpressDev/stratawp-seo](https://github.com/JonImmsWordpressDev/stratawp-seo) (WordPress): SEO plugin with technical SEO and AI citation tracking.
-- [AEO-God-Mode/aeo-god-mode](https://github.com/AEO-God-Mode/aeo-god-mode) (WordPress): Schema, llms.txt, AI crawler controls, and citation tracking.
-- [AEO-Content-Inc/aeo-content-ai-studio](https://github.com/AEO-Content-Inc/aeo-content-ai-studio) (WordPress): Manages llms.txt, ai.txt, structured data, and semantic HTML.
-- [madeburo/GEO-AI-Woo](https://github.com/madeburo/GEO-AI-Woo) (WooCommerce): llms.txt, AI crawler rules, and AI metadata.
-- [madeburo/GEO-AI-Shopify](https://github.com/madeburo/GEO-AI-Shopify) (Shopify): llms.txt, AI crawler rules, and metadata for Shopify stores.
-- [angeo-dev/module-llms-txt](https://github.com/angeo-dev/module-llms-txt) (Magento 2): llms.txt, llms-full.txt, and markdown page mirrors.
-- [schaefersoft/laravel-llms-txt](https://github.com/schaefersoft/laravel-llms-txt) (Laravel): llms.txt and llms-full.txt for Laravel apps.
-- [GitHiteshZope/aigeo](https://github.com/GitHiteshZope/aigeo) (Laravel): Surfaces products in AI-generated answers.
-- [rtfirst/llms-txt](https://github.com/rtfirst/llms-txt) (TYPO3): llms.txt index files, with optional API key protection.
-- [WebTolk/WT-LLMs](https://github.com/WebTolk/WT-LLMs) (Joomla): llms.txt, llms-full.txt, and llms.json.
+
+- [TurboDocx/next-plugin-llms](https://github.com/TurboDocx/next-plugin-llms) (Next.js plugin): Scans your Next.js app at build time and generates llms.txt, llms-full.txt and a markdown version of each page.
+- [nuxt-content/nuxt-llms](https://github.com/nuxt-content/nuxt-llms) (Nuxt module): Generates /llms.txt (and optionally /llms-full.txt) for a Nuxt site, with sections set in your Nuxt config.
+- [harlan-zw/nuxt-seo](https://github.com/harlan-zw/nuxt-seo) (Nuxt module): Bundle of nine SEO modules for Nuxt: robots.txt, sitemaps, Schema.org JSON-LD, social images, link checking, plus an "AI Ready" module for llms.txt and markdown page versions. Very active.
+- [okineadev/vitepress-plugin-llms](https://github.com/okineadev/vitepress-plugin-llms) (VitePress plugin): Generates llms.txt, llms-full.txt and markdown versions of each page for VitePress documentation sites.
+- [delucis/starlight-llms-txt](https://github.com/delucis/starlight-llms-txt) (Astro Starlight plugin): Generates llms.txt files for documentation sites built with Starlight.
+- [tfmurad/astro-llms-md](https://github.com/tfmurad/astro-llms-md) (Astro integration): Generates llms.txt, llms-full.txt and a markdown file for each page of an Astro site, with zero setup.
+- [pawamoy/mkdocs-llmstxt](https://github.com/pawamoy/mkdocs-llmstxt) (MkDocs plugin): Generates /llms.txt and markdown page versions for MkDocs documentation sites. The author has put it in maintenance mode.
+- [ultralytics/mkdocs](https://github.com/ultralytics/mkdocs) (MkDocs plugin): Ultralytics' plugin for MkDocs sites: meta tags, JSON-LD (including FAQ markup), social cards, a "copy for LLM" button and llms.txt generation. AGPL license.
+- [jdillard/sphinx-llms-txt](https://github.com/jdillard/sphinx-llms-txt) (Sphinx extension): Generates llms.txt and a combined llms-full.txt for Sphinx documentation projects.
+- [WP-Autoplugin/llms-txt-for-wp](https://github.com/WP-Autoplugin/llms-txt-for-wp) (WordPress plugin): Creates an llms.txt file from chosen posts and pages, and serves a markdown version of any post by adding .md to its URL. Install from the ZIP on its releases page. Last updated March 2026.
+- [JonImmsWordpressDev/stratawp-seo](https://github.com/JonImmsWordpressDev/stratawp-seo) (WordPress plugin): All-in-one AI SEO plugin: writes site-aware blog posts, handles technical SEO (sitemaps, redirects, schema) and adds AI visibility and answer-engine features. GPL.
+- [AEO-God-Mode/aeo-god-mode](https://github.com/AEO-God-Mode/aeo-god-mode) (WordPress plugin): Free plugin, also on WordPress.org: lets you allow or block 18 AI bots one by one, adds schema (FAQ, HowTo, Organization and more) without clashing with Yoast or Rank Math, generates llms.txt and tracks citations.
+- [AEO-Content-Inc/aeo-content-ai-studio](https://github.com/AEO-Content-Inc/aeo-content-ai-studio) (WordPress plugin): Connects a WordPress site to the paid AEO Content AI Studio service for AI-written content and site audits. The plugin is open source, but the features live in that outside service. Last updated April 2026.
+- [madeburo/GEO-AI-Woo](https://github.com/madeburo/GEO-AI-Woo) (WordPress/WooCommerce plugin): Generates llms.txt and llms-full.txt, AI crawler rules and AI metadata for WordPress, with optional WooCommerce product support. Part of the author's GEO AI family of tools. Last updated March 2026.
+- [madeburo/GEO-AI-Shopify](https://github.com/madeburo/GEO-AI-Shopify) (Shopify app): Shopify app version of the same tool: llms.txt, AI crawler rules and metadata for a store, served through a Shopify app proxy. You host the app yourself. Last updated March 2026.
+- [angeo-dev/module-llms-txt](https://github.com/angeo-dev/module-llms-txt) (Magento 2 module): Generates llms.txt, llms-full.txt and product data files for Magento / Adobe Commerce stores so AI crawlers can read your catalog.
+- [schaefersoft/laravel-llms-txt](https://github.com/schaefersoft/laravel-llms-txt) (Laravel package): Generates llms.txt and llms-full.txt for a Laravel app, either from your routes automatically or built by hand in code.
+- [GitHiteshZope/aigeo](https://github.com/GitHiteshZope/aigeo) (Laravel package): GEO toolkit for Laravel stores: llms.txt, product JSON-LD, a 0–100 product GEO score, an AI product feed and a dashboard. Last updated April 2026.
+- [rtfirst/llms-txt](https://github.com/rtfirst/llms-txt) (TYPO3 extension): Generates llms.txt per language plus markdown versions of pages for TYPO3 sites, with optional API-key protection.
+- [WebTolk/WT-LLMs](https://github.com/WebTolk/WT-LLMs) (Joomla extension): Lets a Joomla site owner describe the business (profile, service area, contacts, key pages) and publishes /llms.txt and /llms.json, plus markdown page versions. Documentation is in Russian.
+
 ### 1e. Agent-friendly serving (markdown twins & AI-only payloads)
- 
-- [nlweb-ai/NLWeb](https://github.com/nlweb-ai/NLWeb): Reference implementation that adds natural-language interfaces to websites, serving people and AI agents (via MCP) from the same APIs. MIT.
-- [rubenmarcus/aeo.js](https://github.com/rubenmarcus/aeo.js): AEO library that generates llms.txt, robots.txt, sitemap, and JSON-LD.
-- [dodopayments/dualmark](https://github.com/dodopayments/dualmark): Serves a markdown version of each page to AI agents alongside HTML for humans, via content negotiation.
-- [agent-ecosystem/agent-docs-spec](https://github.com/agent-ecosystem/agent-docs-spec): Specification for making documentation sites readable by AI coding agents.
-- [yazinsai/site-md](https://github.com/yazinsai/site-md): Next.js middleware: clean markdown for agents and crawlers, HTML for humans.
-- [continuedev/next-geo](https://github.com/continuedev/next-geo): Serves markdown instead of HTML to LLMs in Next.js App Router apps.
-- [frontier-infra/avl](https://github.com/frontier-infra/avl): "Agent View Layer": text companions for AI agents, CMS plugins, and agent-ready discovery.
-- [aagedik/aigeoradar-aipm](https://github.com/aagedik/aigeoradar-aipm): Open JSON spec for per-page metadata aimed at AI crawlers and RAG systems.
-- [SynSwarm/synswarm-protocol](https://github.com/SynSwarm/synswarm-protocol): Edge middleware serving structured payloads to AI crawlers.
-- [JGinSJ/edge-ai-markdown](https://github.com/JGinSJ/edge-ai-markdown): Akamai EdgeWorker serving token-efficient markdown to AI crawlers.
-- [prerex/prerex](https://github.com/prerex/prerex): WordPress prerendering so search engines and AI crawlers see full content.
+
+- [nlweb-ai/NLWeb](https://github.com/nlweb-ai/NLWeb) (Python framework): Open protocol and reference code (started by Microsoft) that lets people and AI agents ask a website questions in plain language, answered from the site's Schema.org data. Every NLWeb site also works as an MCP server. A developer project, not a quick tool.
+- [rubenmarcus/aeo.js](https://github.com/rubenmarcus/aeo.js) (Node tool + framework plugins): Two things in one: "npx aeo.js check yoursite.com" gives a 0–100 GEO score, an access table for 23 AI crawlers and top fixes; installed in Astro or Next.js, it generates llms.txt, robots.txt, sitemap and JSON-LD.
+- [dodopayments/dualmark](https://github.com/dodopayments/dualmark) (Framework plugin (Node)): Gives every page a markdown twin at the same URL, served to AI agents that ask for markdown, plus llms.txt and a verify score. For Astro, Next.js, SvelteKit and Cloudflare. Apache 2.0.
+- [agent-ecosystem/agent-docs-spec](https://github.com/agent-ecosystem/agent-docs-spec) (Specification): Draft spec for making documentation sites work for AI coding agents: content length limits, markdown versions, discovery and redirects.
+- [yazinsai/site-md](https://github.com/yazinsai/site-md) (Next.js add-on): One command adds middleware so AI agents get clean markdown of your Next.js pages (add .md to a URL) while people keep getting HTML. Last updated April 2026.
+- [continuedev/next-geo](https://github.com/continuedev/next-geo) (Next.js add-on): Serves markdown instead of HTML when an AI requests a page in a Next.js App Router site, either from page.md files you write or by converting automatically. Last updated March 2026.
+- [frontier-infra/avl](https://github.com/frontier-infra/avl) (Node toolkit): "Agent View Layer": gives every page of a web app a parallel version written for AI agents, a bit like a translation where the target language is "agent". Includes CMS plugins and agent discovery files.
+- [aagedik/aigeoradar-aipm](https://github.com/aagedik/aigeoradar-aipm) (Specification): Proposed format for a small ".ai.json" file next to each page, listing that page's key facts (purpose, summary, key facts, topic) so AI systems don't have to guess from the HTML. A companion to llms.txt; not yet a widely adopted standard.
+- [SynSwarm/synswarm-protocol](https://github.com/SynSwarm/synswarm-protocol) (Node middleware): When an AI crawler like GPTBot visits, it skips your normal page and serves a rewritten, structured version instead. Caution: showing bots different content than people see is a known risk with search engines.
+- [JGinSJ/edge-ai-markdown](https://github.com/JGinSJ/edge-ai-markdown) (Proof of concept (Akamai)): Demo setup that converts pages to markdown at the Akamai edge for verified AI bots, without touching the website itself. Needs Akamai EdgeWorkers; built as a proof of concept.
+- [prerex/prerex](https://github.com/prerex/prerex) (WordPress plugin + server configs): Serves a fully rendered copy of each page to bots (Google, GPTBot, ClaudeBot and others) so content loaded by JavaScript is visible to them. Has a paid Pro tier. Last updated March 2026.
+
 ### 1f. Machine-readability audits & linters
- 
-- [onvoyage-ai/gtm-engineer-skills](https://github.com/onvoyage-ai/gtm-engineer-skills): Claude Code skill for raising AEO and GEO scores: 16 checks across 6 dimensions, with framework-specific fixes.
-- [Auriti-Labs/geo-optimizer-skill](https://github.com/Auriti-Labs/geo-optimizer-skill): Audits robots.txt bot access, llms.txt depth, JSON-LD richness, brand entity coherence, and citability, then generates fixes. CLI, Python, MCP, Astro.
-- [jdevalk/specification.website](https://github.com/jdevalk/specification.website): Platform-agnostic website spec covering HTML, accessibility, security, SEO, and agent readiness.
-- [jianruntech/geo-score](https://github.com/jianruntech/geo-score): 0–100 readiness score on an open rubric, plus citation tracking with your own keys. CLI, GitHub Action, MCP.
-- [squirrelscan/squirrelscan](https://github.com/squirrelscan/squirrelscan): Website QA tool with 300+ audit rules built for coding agents.
-- [Houseofmvps/claude-rank](https://github.com/Houseofmvps/claude-rank): Explains why a site isn't cited by AI and fixes discoverability files; 170+ rules across 10 scanners.
-- [OranAi-Ltd/orangeo-ai-visibility-skill](https://github.com/OranAi-Ltd/orangeo-ai-visibility-skill): Checks robots.txt, llms.txt, schema, citation signals, competitor gaps, and buyer prompts.
-- [spronta/crawlie](https://github.com/spronta/crawlie): Fast, free technical SEO and GEO crawler for humans and agents.
-- [Cognitic-Labs/geoskills](https://github.com/Cognitic-Labs/geoskills): Six agent skills to diagnose, fix, and monitor AI visibility.
-- [TheSmokeDev/geo-skills](https://github.com/TheSmokeDev/geo-skills): 29 GEO agent skills plus a CLI for audits, citability, and crawler checks.
-- [fseixas/super-geo-agent-readiness](https://github.com/fseixas/super-geo-agent-readiness): Agent-readiness skill exposing MCP, llms.txt, and OAuth to AI agents.
-- [glincker/geokit](https://github.com/glincker/geokit): Lighthouse-style 0–100 AI-readiness audit.
-- [vinpatel/aeorank](https://github.com/vinpatel/aeorank): 0–100 AI visibility score across 12 dimensions; generates AI-readable files. CLI and GitHub Action.
-- [techhorizonlabs/thl-open](https://github.com/techhorizonlabs/thl-open): Turns a client site into an AI-readiness audit, ranked fix plan, and branded report.
-- [IliasSami/scrawly-seo-crawler](https://github.com/IliasSami/scrawly-seo-crawler): Desktop crawler with 250+ technical SEO, GEO, and AI-search checks.
-- [SamurAIGPT/geo-checker](https://github.com/SamurAIGPT/geo-checker): Next.js app auditing how likely landing pages are to be cited by AI search.
-- [angeo-dev/module-aeo-audit](https://github.com/angeo-dev/module-aeo-audit): Magento 2 CLI scoring robots.txt, llms.txt, and schema signals, with fix commands and CI gating.
-- [sprawf/geoscore](https://github.com/sprawf/geoscore): SEO and AI visibility audit built on Cloudflare Workers and D1.
-- [Saqierma/miaowageo](https://github.com/Saqierma/miaowageo): Tests whether major AI chatbots can crawl, understand, and cite a site.
-- [metehan777/http-header-link-graph](https://github.com/metehan777/http-header-link-graph): Publishes a site's link graph and heading map in HTTP headers so large sites can be crawled without parsing HTML.
-- [agencyenterprise/aiseo-audit](https://github.com/agencyenterprise/aiseo-audit): CLI scoring how easily AI engines can ingest, understand, and reuse a URL's content.
-- [bemoshiur/OmniRank](https://github.com/bemoshiur/OmniRank): In-repo auditor that maps findings to source files, shows fix diffs, and generates llms.txt.
-- [Canonry/aeo-audit](https://github.com/Canonry/aeo-audit): Technical AEO audit library and CLI for agents.
-- [antlio/agentimization](https://github.com/antlio/agentimization): Scores how easily Claude, ChatGPT, Perplexity, and Gemini can find, understand, and cite a site.
-- [seo-skills/geo-audit-skill](https://github.com/seo-skills/geo-audit-skill): Deterministic GEO scores via Python CLI and Claude Code skills.
-- [wusmaiv/geo-audit](https://github.com/wusmaiv/geo-audit): Python CLI auditing page visibility to AI Overviews, ChatGPT, Perplexity, and Claude.
-- [iliasabk/geolint](https://github.com/iliasabk/geolint): ESLint-style auditor for AI crawler access, llms.txt, structured data, and citability.
-- [vasco-branco06/geo-check](https://github.com/vasco-branco06/geo-check): Checks whether AI crawlers can reach and read a site, then scores it.
-- [seryvon-com/seryvon](https://github.com/seryvon-com/seryvon): Self-hosted audit with transparent, deterministic scoring across SEO, GEO, AEO.
-- [caiopizzol/pagesight](https://github.com/caiopizzol/pagesight): Shows your site the way search engines and AI systems see it.
-- [lireking/seo-geo-audit](https://github.com/lireking/seo-geo-audit): Dependency-free crawler checking classic SEO and AI-crawler readiness.
-- [ryanportfolio/willaicite](https://github.com/ryanportfolio/willaicite): Deterministic audit of whether AI answer engines can retrieve and quote a site.
+
+- [onvoyage-ai/gtm-engineer-skills](https://github.com/onvoyage-ai/gtm-engineer-skills) (Claude skills): Pipeline of agent skills for go-to-market work: brand and keyword research, Reddit opportunities, GEO content planning and writing, AI-readable charts, plus a website AEO audit with prioritized fixes and code changes.
+- [Auriti-Labs/geo-optimizer-skill](https://github.com/Auriti-Labs/geo-optimizer-skill) (Python tool + MCP + skill): Scores a website 0–100 on whether AI engines can crawl, understand and cite it, across 9 categories and 27 AI crawlers, then generates fixes (robots.txt, llms.txt, schema). 16 commands, including citation checks with your own API keys.
+- [jdevalk/specification.website](https://github.com/jdevalk/specification.website) (Reference website): Platform-neutral checklist of what a good website should have, from HTML basics and accessibility to security headers and llms.txt, with sources on every page. A reference to read, plus an MCP server.
+- [jianruntech/geo-score](https://github.com/jianruntech/geo-score) (Python tool + MCP + GitHub Action): Free 0–100 readiness score from one file with no dependencies, plus optional citation checks and weekly tracking through the AI engines' APIs with your own keys.
+- [squirrelscan/squirrelscan](https://github.com/squirrelscan/squirrelscan) (CLI program): Website audit tool with 300+ rules in 22 categories (SEO, speed, security, accessibility, "agent experience") that gives a coding agent exact fixes. Not GEO-specific, but covers AI agent readiness.
+- [Houseofmvps/claude-rank](https://github.com/Houseofmvps/claude-rank) (Claude Code plugin): 10 scanners and 170+ checks for whether AI engines can find, crawl and cite your site; auto-fixes robots.txt, sitemap, llms.txt and JSON-LD. Works on local projects and live URLs.
+- [OranAi-Ltd/orangeo-ai-visibility-skill](https://github.com/OranAi-Ltd/orangeo-ai-visibility-skill) (Claude skill + Python script): Readiness check for a brand site: AI crawler access, llms.txt, sitemap, meta tags, schema, proof pages and third-party signals, plus 15 buyer prompts to test in AI assistants. Reports readiness only, not real AI answers; points to the paid OranGEO service for that.
+- [spronta/crawlie](https://github.com/spronta/crawlie) (CLI + MCP (Rust, via npm)): Free technical SEO and GEO crawler: broken links, redirects, missing metadata and 40+ SEO and AI-search checks with plain-English fix advice. Runs locally; also a desktop app.
+- [Cognitic-Labs/geoskills](https://github.com/Cognitic-Labs/geoskills) (Claude skills): Agent skills to audit a site for AI search, rewrite content to be quoted, generate schema and monitor visibility. Works with Claude Code, Cursor, Codex and others. Apache 2.0.
+- [TheSmokeDev/geo-skills](https://github.com/TheSmokeDev/geo-skills) (Claude skills + Python tool): GEO skill pack plus a read-only command-line tool: crawls a site and gives a 0–100 GEO score across citability, brand authority, E-E-A-T, technical setup and more.
+- [fseixas/super-geo-agent-readiness](https://github.com/fseixas/super-geo-agent-readiness) (Claude skill): Large GEO and agent-readiness skill backed by research notes (for example, a 2026 analysis of how ChatGPT picks sources, and Ahrefs studies suggesting schema alone doesn't lift AI citations). More of a knowledge base than an automated audit.
+- [glincker/geokit](https://github.com/glincker/geokit) (Node tools): Toolkit: a 0–100 AI-readiness audit ("npx @glincker/geo-audit yoursite.com"), generators for llms.txt, JSON-LD, robots.txt and sitemap, and a page-to-markdown converter, with plugins for Next.js, Astro, Nuxt and Vite. Last updated February 2026.
+- [vinpatel/aeorank](https://github.com/vinpatel/aeorank) (Node tool + GitHub Action): Scores crawler access and how easily AI can extract your content (0–100, 12 dimensions), then writes 8 fix files. Can block a code change if GPTBot gets blocked. Free CLI; paid Pro tier.
+- [techhorizonlabs/thl-open](https://github.com/techhorizonlabs/thl-open) (Claude skills): For agencies: turns a client website into an AI-readiness audit, a ranked fix plan and a branded report.
+- [IliasSami/scrawly-seo-crawler](https://github.com/IliasSami/scrawly-seo-crawler) (Desktop app (Python)): Free desktop crawler for Mac, Windows and Linux with 250 technical SEO, GEO and AI-agent checks per page and plain-language fixes; pitched as a free alternative to Screaming Frog. Can apply reversible fixes on WordPress.
+- [SamurAIGPT/geo-checker](https://github.com/SamurAIGPT/geo-checker) (Self-hosted app (Next.js)): A ready-made SaaS template: users log in, pay with Stripe, enter a page URL and get an AI-written GEO review (via the MuAPI service). More a starter kit for building your own audit business than a tool for auditing your site.
+- [angeo-dev/module-aeo-audit](https://github.com/angeo-dev/module-aeo-audit) (Magento 2 module): One command scores a Magento store's AI visibility signals (robots.txt, llms.txt, schema and more), with fix commands and a check that can stop a deploy.
+- [sprawf/geoscore](https://github.com/sprawf/geoscore) (Self-hosted app (Cloudflare)): Website audit that runs on Cloudflare's free tier: technical and on-page SEO, schema, content, accessibility, security, plus an "AI visibility" estimate of whether AI assistants would cite you. Has a live demo. No license file.
+- [Saqierma/miaowageo](https://github.com/Saqierma/miaowageo) (Self-hosted app (Node)): Free GEO checker with 28 technical checks (robots.txt, firewall blocks on AI bots and more), each with evidence. Aimed at Chinese exporters; README mostly in Chinese. AGPL.
+- [metehan777/http-header-link-graph](https://github.com/metehan777/http-header-link-graph) (Experiment (Node + Rust)): Experiment that puts a page's internal links and headings into HTTP headers so crawlers can map a large site without reading HTML. Companion code to a blog post; an idea to study, not a ready tool.
+- [agencyenterprise/aiseo-audit](https://github.com/agencyenterprise/aiseo-audit) (Node tool + MCP + GitHub Action): Lighthouse-style audit of how easily AI engines can fetch, extract, understand and reuse a page. Runs locally with no API keys, and labels each factor by how strong the research behind it is.
+- [bemoshiur/OmniRank](https://github.com/bemoshiur/OmniRank) (Claude skills + CLI): Scores a page's live HTML for SEO, answer-engine and GEO signals (for example, a 40–60 word answer near the top), then generates llms.txt, llms-full.txt and a facts.json file.
+- [Canonry/aeo-audit](https://github.com/Canonry/aeo-audit) (Node tool + Claude skill): Scores any URL or a whole sitemap across 16 answer-engine factors (structured data, llms.txt, E-E-A-T, extractability and more) and ranks the fixes. Also works offline on a built site.
+- [antlio/agentimization](https://github.com/antlio/agentimization) (Node tool): 36 checks in 8 categories on whether AI agents can find, read and cite a site or local folder: llms.txt, markdown versions, page structure, rendering, redirects and access gates.
+- [seo-skills/geo-audit-skill](https://github.com/seo-skills/geo-audit-skill) (Python tool + Claude skills): SEOmator's free GEO audit: which AI crawlers robots.txt lets in, whether passages can be quoted as-is, authorship and date markup, llms.txt and feeds. Every number is reproducible; the AI only explains.
+- [wusmaiv/geo-audit](https://github.com/wusmaiv/geo-audit) (Python tool): One URL in, a scored report out: AI crawler access in robots.txt, llms.txt, JSON-LD and how quotable each passage is. No API key; works in automated checks.
+- [iliasabk/geolint](https://github.com/iliasabk/geolint) (Node tool + MCP + GitHub Action): "ESLint for AI search": checks a page against 51 AI crawler names in your robots.txt plus 52 rules (llms.txt, structured data, citability) and gives a concrete fix for each finding.
+- [vasco-branco06/geo-check](https://github.com/vasco-branco06/geo-check) (Python tool + Claude skill): Checks whether AI crawlers can reach and read a site and gives two separate scores, so blocking AI training doesn't cost you points while blocking AI search does. Can also run from GitHub's website with no install.
+- [seryvon-com/seryvon](https://github.com/seryvon-com/seryvon) (Self-hosted app (Python)): Repeatable audit across five areas: classic SEO, GEO, Google AI Overviews, answer engines and AI agents. Anything it can't measure is marked "not measured", never guessed. Open core; README partly in French. AGPL.
+- [caiopizzol/pagesight](https://github.com/caiopizzol/pagesight) (Bun/Node tool + MCP): Checks a page's performance and, with Google and Bing credentials, your search traffic and analytics, for developers and AI assistants. General SEO, not GEO-specific.
+- [lireking/seo-geo-audit](https://github.com/lireking/seo-geo-audit) (Node scripts): Four small no-dependency tools, each producing a markdown report: a crawler that also spots content invisible to AI crawlers (they don't run JavaScript), speed checks, Search Console opportunities and Umami analytics.
+- [ryanportfolio/willaicite](https://github.com/ryanportfolio/willaicite) (Node tool): Scores a page 0–100 on nine dimensions of whether AI answer engines can retrieve, read and quote it. It fetches the page twice (as a browser and as an AI crawler) to catch hidden blocks. Has a free web version.
+
 ### 1g. Corporate entity mapping & structured data
- 
-- [schemaorg/schemaorg](https://github.com/schemaorg/schemaorg): The Schema.org vocabulary itself — the source of truth for JSON-LD types.
-- [google/schema-dts](https://github.com/google/schema-dts): TypeScript types for Schema.org, so invalid markup fails at build time.
-- [ookyet/web3-identity-seo](https://github.com/ookyet/web3-identity-seo): Turns ENS identities into Google-recognized entities with Schema.org, verification, and indexing.
-- [jdevalk/seo-graph](https://github.com/jdevalk/seo-graph): Builds connected Schema.org JSON-LD graphs for JavaScript sites, with an Astro integration.
-- [saadsalmankhan/entity-seo-skill](https://github.com/saadsalmankhan/entity-seo-skill): Skill and playbook for ranking a person or brand for its own name, with JSON-LD and Search Console automation.
-- [terekhindc/open-entity-graph](https://github.com/terekhindc/open-entity-graph): Public registry of Schema.org JSON-LD organization records, CC0, meant as a "source of truth" for AI models.
-- [josezuma/schema-for-ai](https://github.com/josezuma/schema-for-ai): Annotated JSON-LD templates tuned for AI extraction.
-- [theseoriddler/google_knowledge_panel_mcp](https://github.com/theseoriddler/google_knowledge_panel_mcp): MCP server for Knowledge Graph lookup, panel readiness audits, Wikidata mapping, and JSON-LD generation.
-- [aksanovdgtl-cmyk/brand-entity-check](https://github.com/aksanovdgtl-cmyk/brand-entity-check): Checks 18 homepage entity signals, Organization schema, sameAs, and Wikidata presence.
-- [erwantanguy/geo-authority-suite-v1.2](https://github.com/erwantanguy/geo-authority-suite-v1.2): WordPress plugin for schema.org entities, JSON-LD, and llms.txt.
-- [LucasFerrazSEO/entity-sameas-check](https://github.com/LucasFerrazSEO/entity-sameas-check): Audits Organization and Person sameAs links for dead profiles, duplicates, and Wikidata consistency.
-- [agencekoeki/awesome-entity-seo](https://github.com/agencekoeki/awesome-entity-seo): Practitioner reference for entity SEO and Knowledge Graph work.
-- [alexrodrigues43/Semantico-Entity-Engine](https://github.com/alexrodrigues43/Semantico-Entity-Engine): Entity modeling, Wikidata reconciliation, knowledge graph views, and JSON-LD/RDF export. **Note:** code is public but marked "all rights reserved," so it isn't open source.
+
+- [schemaorg/schemaorg](https://github.com/schemaorg/schemaorg) (Reference (official)): The official Schema.org project: every structured-data type and property, and how the vocabulary evolves. A reference, not a tool.
+- [google/schema-dts](https://github.com/google/schema-dts) (TypeScript library): TypeScript types for Schema.org, so developers get autocomplete and errors when writing JSON-LD. Not an official Google product.
+- [ookyet/web3-identity-seo](https://github.com/ookyet/web3-identity-seo) (Documentation): Documented method for making blockchain (ENS) identity pages recognized as entities: Schema.org markup, cross-profile verification and fast-indexing submission. Niche: only relevant for ENS names.
+- [jdevalk/seo-graph](https://github.com/jdevalk/seo-graph) (JavaScript library + Astro integration): Builds connected Schema.org JSON-LD graphs (organization, person, articles and more) for JavaScript sites, by Joost de Valk (creator of Yoast). Includes recipes per site type.
+- [saadsalmankhan/entity-seo-skill](https://github.com/saadsalmankhan/entity-seo-skill) (Claude skill): Entity SEO: maps you, your brand, company and products as entities with their relationships, audits whether each one is stated on-site, in schema and off-site, then writes the JSON-LD and profile copy to fix the gaps.
+- [terekhindc/open-entity-graph](https://github.com/terekhindc/open-entity-graph) (Data registry): Public registry where organizations add Schema.org JSON-LD records about themselves (CC0), meant as a source of truth for AI. Small and young; not something AI engines are known to read. Last updated April 2026.
+- [josezuma/schema-for-ai](https://github.com/josezuma/schema-for-ai) (Templates + Python script): JSON-LD templates for common page types, with notes, aimed at AI extraction. The README itself is very thin.
+- [theseoriddler/google_knowledge_panel_mcp](https://github.com/theseoriddler/google_knowledge_panel_mcp) (MCP server (Node)): Lets Claude look up what Google's Knowledge Graph holds for any brand or person, compare entities, check knowledge panel readiness and generate JSON-LD. Needs a free Google API key.
+- [aksanovdgtl-cmyk/brand-entity-check](https://github.com/aksanovdgtl-cmyk/brand-entity-check) (Web app (Cloudflare)): Scores 18 brand-entity signals on your home page (brand in title and H1, Organization markup, sameAs links, contacts) plus a Wikidata lookup. Free online version by the HITZ agency; README in English and Russian.
+- [erwantanguy/geo-authority-suite-v1.2](https://github.com/erwantanguy/geo-authority-suite-v1.2) (WordPress plugin): Manages Schema.org entities (organization, person, product and more) and their relationships, outputs JSON-LD and generates llms.txt. README in French.
+- [LucasFerrazSEO/entity-sameas-check](https://github.com/LucasFerrazSEO/entity-sameas-check) (Python tool): Checks the sameAs profile links in your Organization and Person JSON-LD: dead links, duplicates, tracking parameters, and consistency with Wikidata. Reports are printed in Brazilian Portuguese.
+- [agencekoeki/awesome-entity-seo](https://github.com/agencekoeki/awesome-entity-seo) (Reading list): Curated reading list on entity SEO and knowledge graphs (Schema.org, Wikidata, the Kalicube method), maintained by one consultant. Last updated April 2026.
+- [alexrodrigues43/Semantico-Entity-Engine](https://github.com/alexrodrigues43/Semantico-Entity-Engine) (Web app (code only)): Entity modeling app with AI-generated definitions, Wikidata reconciliation, knowledge graph views and JSON-LD export. Portuguese only, no license (all rights reserved), so not open source.
+
 ---
- 
+
 ## 2. Information Architecture & Content Synthesis
- 
+
 ### 2a. Chunking, embeddings & retrieval simulation
- 
-- [tmolavi/sage-audit](https://github.com/tmolavi/sage-audit): Splits content into 60–120 token passages, embeds them locally, simulates RAG retrieval, scores "Citation Survival Probability," and exports RAG-ready chunks plus llms.txt. The closest match to this category.
-- [tmolavi/mcp-geo-server](https://github.com/tmolavi/mcp-geo-server): MCP server for GEO and RAG-readiness audits with JSON-LD support.
-- [DivitMittal/citestage](https://github.com/DivitMittal/citestage): Local, reproducible generative-search simulator that diagnoses why AI engines don't cite a project.
-- [Hero777-tech/georankpy](https://github.com/Hero777-tech/georankpy): Python GEO toolkit whose score includes "Chunk Retrievability" (RAG-readiness of each section).
-- [chonkie-ai/chonkie](https://github.com/chonkie-ai/chonkie): *Borrowed from the RAG world:* lightweight token, sentence, and semantic chunking — handy for seeing how retrieval systems slice your pages.
-- [adbar/trafilatura](https://github.com/adbar/trafilatura): *Borrowed:* extracts the main text from HTML the way indexing pipelines do — a quick check of what survives extraction.
+
+- [tmolavi/sage-audit](https://github.com/tmolavi/sage-audit) (Python tool + MCP): Audits a URL or raw HTML for technical SEO, entity markup and GEO. Its GEO part splits text into passages, embeds them locally, simulates AI retrieval and scores how likely passages are to survive it. Also exports RAG-ready chunks.
+- [tmolavi/mcp-geo-server](https://github.com/tmolavi/mcp-geo-server) (MCP server (Python)): Lets AI assistants run sage-audit (above): full audits of a URL or raw HTML, or single parts like technical SEO or retrieval simulation.
+- [DivitMittal/citestage](https://github.com/DivitMittal/citestage) (Rust tool): Research-grade simulator of an answer engine's steps (crawl, parse, index, retrieve, rerank, answer, cite) that shows at which step your content loses to competitors. Developer setup needed.
+- [chonkie-inc/chonkie](https://github.com/chonkie-inc/chonkie) (Python library): Not GEO-specific: a popular library for splitting text into chunks for AI retrieval systems. Useful if you want to see how such systems slice your pages.
+- [adbar/trafilatura](https://github.com/adbar/trafilatura) (Python tool + library): Not GEO-specific: extracts the main text and metadata from web pages, dropping menus and footers, the way many AI data pipelines do. A quick way to see what survives extraction.
+
 ### 2b. Answer-first layouts & content linters
- 
-- [cucuwang/geoptimize](https://github.com/cucuwang/geoptimize): Deterministic content-readiness linter for GEO on Next.js and static sites.
-- [deepakness/google-ai-search-optimization](https://github.com/deepakness/google-ai-search-optimization): Agent skill based on Google's guidance for AI Overviews and AI Mode.
-- [IJONIS/geo-lint](https://github.com/IJONIS/geo-lint): GEO content linter with 90+ rules and a suggested fix for each issue.
-- [zubair-trabzada/geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude): Citability skill scores content 0–100 on how quotable it is for AI, with targeted rewrites.
-- [imsankz/SEOflow](https://github.com/imsankz/SEOflow): GEO audit mode scores each post on answer-first openings, question headings, FAQ blocks, and list/table density.
-- [fritzhand/geo-landing-page](https://github.com/fritzhand/geo-landing-page): Astro landing page template with JSON-LD, auto llms.txt, and FAQ microdata built in.
-- [goldk3y/agentblog](https://github.com/goldk3y/agentblog): Next.js blog structured for AI search engines, with an agent writing layer.
-- [rakeshcheekatimala/answerlint](https://github.com/rakeshcheekatimala/answerlint): Lighthouse-inspired CLI scoring content for AEO and GEO.
-- [Alpha-Park/genpark-generative-engine-optimization-and-citation-scorer-skill](https://github.com/Alpha-Park/genpark-generative-engine-optimization-and-citation-scorer-skill): Scores content for citation visibility, factual definitions, and structured metrics.
-- [paultaki/get-cited-by-ai](https://github.com/paultaki/get-cited-by-ai): Claude Code skill with writing rules drawn from 26,767 measured AI citations.
+
+- [cucuwang/geoptimize](https://github.com/cucuwang/geoptimize) (Node tool): Repeatable content lint for websites and docs: document structure, sourced numbers and similar checks. States clearly that it does not predict rankings or AI citations. Formerly "aeoptimize".
+- [deepakness/google-ai-search-optimization](https://github.com/deepakness/google-ai-search-optimization) (Claude skill): Applies Google's own published guidance on AI Overviews and AI Mode to audit and plan a site: crawlability, helpful content, structured data. Unofficial. No license file.
+- [IJONIS/geo-lint](https://github.com/IJONIS/geo-lint) (Node tool + Claude skill): Linter for Markdown/MDX content with SEO and GEO rules; your AI agent can fix each issue from the suggestion it gives. Also adds a content creation pipeline. Last updated March 2026.
+- [fritzhand/geo-landing-page](https://github.com/fritzhand/geo-landing-page) (Website template (Astro)): Landing page template for startups with GEO built in: answer-focused opening text, Schema.org JSON-LD, FAQ markup, auto-generated llms.txt and an AI-friendly robots.txt. You edit two settings files, then deploy, for example to Vercel. Project name: "Startup Landing Kit". Last updated April 2026.
+- [goldk3y/agentblog](https://github.com/goldk3y/agentblog) (Website template (Next.js)): Ready-made Next.js blog that AI crawlers can actually read (server-rendered content, correct metadata, author entities, fresh sitemap), with a checker that wires things up and an AI writing layer.
+- [rakeshcheekatimala/answerlint](https://github.com/rakeshcheekatimala/answerlint) (Node tool): Audits web content for answer-engine and GEO readiness: whether AI can understand, trust and cite it, and what to improve.
+- [Alpha-Park/genpark-generative-engine-optimization-and-citation-scorer-skill](https://github.com/Alpha-Park/genpark-generative-engine-optimization-and-citation-scorer-skill) (MCP server + skill (Python)): Scores content for AI citation potential (clear definitions, structured facts). The README is a single sentence and there's no license file, so it's hard to evaluate.
+- [paultaki/get-cited-by-ai](https://github.com/paultaki/get-cited-by-ai) (Claude skill): Built from 155,000+ AI citations logged by Bing across the author's seven sites. It first checks whether anyone actually asks AI the questions your site answers, then separates "basics" from the few changes that correlate with citations, and gives a free way to measure results. Notably skeptical of common advice like schema and llms.txt.
+
 ### 2c. Content creation, rewriting & publishing
- 
-- [yaojingang/GEOFlow](https://github.com/yaojingang/GEOFlow): GEO content and multi-site publishing platform with AI quality checks.
-- [gbessoni/seobuild-onpage](https://github.com/gbessoni/seobuild-onpage): AI agent that writes pages built to rank in Google and be cited by LLMs.
-- [geo-team-red/geo-optimizer](https://github.com/geo-team-red/geo-optimizer): Pluggable GEO framework in Go with built-in and custom strategies.
-- [mverab/eGEOagents](https://github.com/mverab/eGEOagents): Rewrites site content for ChatGPT, Perplexity, AI Overviews, Claude, and Gemini; batch and competitor modes.
-- [chnjames/AIGEOTOOLS](https://github.com/chnjames/AIGEOTOOLS): Content platform for getting brands cited in AI answers, with keyword strategy and analytics (Chinese).
-- [yaojingang/GEOHub](https://github.com/yaojingang/GEOHub): GEO and SEO agent skills covering discovery, diagnosis, content, and measurement.
-- [HeiGeAi/HeiGe-GEO-SEO](https://github.com/HeiGeAi/HeiGe-GEO-SEO): China-focused GEO content system for AI assistants. MIT.
-- [shadowresearch/auto-geo](https://github.com/shadowresearch/auto-geo): GEO engine aimed at getting brands mentioned in major AI chatbots.
-- [CDragon123-code/geo-copilot](https://github.com/CDragon123-code/geo-copilot): Chrome extension that captures LLM answers, finds patterns, and drafts articles.
+
+- [imsankz/SEOflow](https://github.com/imsankz/SEOflow) (Node tool + Claude agents): Automated SEO pipeline for content sites (Next.js, Hugo, Astro, WordPress and more): audits posts, fixes frontmatter, adds internal links and images, writes new posts, and has a GEO audit mode.
+- [yaojingang/GEOFlow](https://github.com/yaojingang/GEOFlow) (Self-hosted platform (PHP/Laravel)): Enterprise GEO content operations: a trusted knowledge base, AI content production, quality gates, human review and publishing to multiple sites. Mostly in Chinese, with translated READMEs. AGPL.
+- [gbessoni/seobuild-onpage](https://github.com/gbessoni/seobuild-onpage) (Claude skill): "/seoagi <keyword>" pulls the current Google results, finds content gaps and writes a complete page meant to rank in Google and be cited by AI, with strict rules against made-up claims. Includes Search Console helpers.
+- [geo-team-red/geo-optimizer](https://github.com/geo-team-red/geo-optimizer) (Go library): Developer framework for rewriting content with built-in strategies (structure, schema, answer-first, authority, FAQ) and an LLM connection. Code to build on, not a ready app. Last updated March 2026.
+- [mverab/eGEOagents](https://github.com/mverab/eGEOagents) (Python tool + Claude skills): "egeo optimize" rewrites a page using 10 features from the E-GEO research paper and outputs a GEO score, the rewritten page, JSON-LD and a report. Can also take a tracker's report and rewrite the pages that lose citations. Installed as "egeo".
+- [chnjames/AIGEOTOOLS](https://github.com/chnjames/AIGEOTOOLS) (Python app (Streamlit)): Chinese-language GEO content platform: keyword strategy, AI content generation with templates for 20+ Chinese platforms (Zhihu, Xiaohongshu and others) and tracking.
+- [yaojingang/GEOHub](https://github.com/yaojingang/GEOHub) (Claude skills (Python)): Experimental GEO skill hub: discovery, site diagnosis (up to 10 page types), content creation, measurement from saved AI answers, strategy and knowledge graphs. Never guesses missing data. AGPL.
+- [HeiGeAi/HeiGe-GEO-SEO](https://github.com/HeiGeAi/HeiGe-GEO-SEO) (Python toolkit): China-first GEO system: how Chinese AI assistants (Doubao, Qwen, DeepSeek, ERNIE) find content, where to publish, a 22-item citability scorecard and generators for robots.txt, llms.txt and JSON-LD. Also covers ChatGPT and others. README mostly in Chinese.
+- [shadowresearch/auto-geo](https://github.com/shadowresearch/auto-geo) (Node tool): One command-line loop to audit pages for citation readiness, generate and fix pages, and track whether AI engines cite your domain. File-based: no server, account or database.
+- [CDragon123-code/geo-copilot](https://github.com/CDragon123-code/geo-copilot) (Browser extension): Chrome/Edge extension for a repeatable loop: ask an AI about your product category, capture the answer and cited sources, study those sources and rewrite a publish-ready article. Works with Chinese and Western AI assistants.
+
 ### 2d. Research code & benchmarks
- 
-- [GEO-optim/GEO](https://github.com/GEO-optim/GEO): Official code for the original GEO paper (Aggarwal et al.), plus the GEO-Bench dataset.
-- [cxcscmu/AutoGEO](https://github.com/cxcscmu/AutoGEO): ICLR 2026: learns generative-engine preferences and rewrites content to match.
-- [Wu-beining/generative-engine-optimization-research-hub](https://github.com/Wu-beining/generative-engine-optimization-research-hub): Running bibliography of GEO, AEO, and AIO papers with code links.
-- [AIcling/agentic_geo](https://github.com/AIcling/agentic_geo): AgenticGEO: self-evolving strategy archive for visibility in black-box generative search.
-- [Generative-Engine-Marketing/GEM-Bench](https://github.com/Generative-Engine-Marketing/GEM-Bench): Benchmark for generative engine marketing (ad-injected AI responses).
-- [QianfengWen/SafeGEO](https://github.com/QianfengWen/SafeGEO): EMNLP 2026 benchmark of GEO attacks on LLM recommendation agents, with mitigations.
-- [tmolavi/geo-scope](https://github.com/tmolavi/geo-scope): Framework for reproducible, multi-model AI visibility benchmarks.
-- [parameterlab/c-seo-bench](https://github.com/parameterlab/c-seo-bench): C-SEO Bench (NeurIPS 2025 Datasets & Benchmarks).
-- [Wu-beining/MAGEO](https://github.com/Wu-beining/MAGEO): MAGEO (ACL Findings 2026).
-- [qychen2001/CC-GSEO-Bench](https://github.com/qychen2001/CC-GSEO-Bench): CC-GSEO-Bench benchmark.
-- [psbagga17/E-GEO](https://github.com/psbagga17/E-GEO): E-GEO research code.
-- [899ms/geo-citation-lab](https://github.com/899ms/geo-citation-lab): Dataset and pipeline for studying how AI search engines pick citations. MIT / CC BY 4.0.
+
+- [GEO-optim/GEO](https://github.com/GEO-optim/GEO) (Research code (Python)): Official code for the original GEO paper (Aggarwal et al., KDD 2024) that defined the field, plus the GEO-Bench dataset. Last updated October 2025.
+- [cxcscmu/AutoGEO](https://github.com/cxcscmu/AutoGEO) (Research code (Python)): ICLR 2026 paper code: learns what each AI search engine prefers and rewrites documents to match, without hurting answer quality. Heavy setup (model training); has an online demo.
+- [Wu-beining/generative-engine-optimization-research-hub](https://github.com/Wu-beining/generative-engine-optimization-research-hub) (Research list): Maintained research hub of GEO papers, benchmarks and code, with notes on which results hold up (for example, C-SEO Bench's finding that many rewriting tricks don't work reliably). Mostly in Chinese.
+- [AIcling/agentic_geo](https://github.com/AIcling/agentic_geo) (Research code (Python)): AgenticGEO: a self-improving system that picks rewriting strategies per document to raise visibility and attribution in AI search, using fewer engine calls.
+- [Generative-Engine-Marketing/GEM-Bench](https://github.com/Generative-Engine-Marketing/GEM-Bench) (Research code (Python)): KDD 2026 benchmark for ads placed inside AI chatbot answers. Related to GEO, but about advertising, not organic visibility.
+- [QianfengWen/SafeGEO](https://github.com/QianfengWen/SafeGEO) (Research code (Python)): EMNLP 2026 benchmark testing whether AI shopping recommenders can be manipulated by sellers rewriting their pages with GEO, plus ways to defend against it.
+- [tmolavi/geo-scope](https://github.com/tmolavi/geo-scope) (Python framework): Framework for measuring AI answer visibility, mentions, recommendations and citations across AI systems in a repeatable way. Ships with a published benchmark on Iran and Türkiye.
+- [parameterlab/c-seo-bench](https://github.com/parameterlab/c-seo-bench) (Research code (Python)): Code for C-SEO Bench (NeurIPS 2025), which tests content-rewriting methods for AI search across domains and finds many don't work reliably. Last updated September 2025.
+- [Wu-beining/MAGEO](https://github.com/Wu-beining/MAGEO) (Research code (Python)): MAGEO (ACL Findings 2026): a team of AI agents that plans, edits and checks document revisions for AI visibility, and remembers strategies that worked. No license file.
+- [qychen2001/CC-GSEO-Bench](https://github.com/qychen2001/CC-GSEO-Bench) (Research code (Python)): Benchmark for GEO techniques that measures exposure, faithful credit and causal impact, not just whether you appear. No license file. Last updated December 2025.
+- [psbagga17/E-GEO](https://github.com/psbagga17/E-GEO) (Research code (Python)): E-GEO: an e-commerce testbed with 13,747 shopping queries and a public leaderboard for product-description rewriters. Includes its 15 best rewriting prompts. No license file.
+- [yaojingang/geo-citation-lab](https://github.com/yaojingang/geo-citation-lab) (Research data + viewer): Open research workbench on how AI search picks sources: cross-platform citation experiments, 214,000+ Chinese AI citation records, a paper library and a GEO quiz. Mostly in Chinese. (Your list had a copy of it; this is the original.)
+
 ---
- 
+
 ## 3. Trackers & Visibility Mentions
- 
+
 ### 3a. Self-hosted tracking platforms
- 
-- [yaojingang/GEORank](https://github.com/yaojingang/GEORank): Self-hostable GEO ranking workbench (Next.js + FastAPI) that turns diagnoses into prompts and action plans.
-- [ai-search-guru/getcito](https://github.com/ai-search-guru/getcito-worlds-first-open-source-aio-aeo-or-geo-tool): AI search optimization and visibility tracking tool.
-- [elmohq/elmo](https://github.com/elmohq/elmo): Tracks mentions and citations across ChatGPT, Claude, Perplexity, Gemini, Copilot, Grok, and AI Overviews. MIT.
-- [Albert-Weasker/niubigeo](https://github.com/Albert-Weasker/niubigeo): Start from a domain to see how models describe you, which competitors they name, and which sources they cite; keeps raw answers as evidence. Apache 2.0.
-- [usenotra/notra](https://github.com/usenotra/notra): Asks AI assistants buyer questions to show your visibility, competitors, and fixes.
-- [oneglanse/oneglanse](https://github.com/oneglanse/oneglanse): Tracks mentions and citations through the real product interfaces of major AI tools. MIT.
-- [limelit-co/open](https://github.com/limelit-co/open): One Go binary with SQLite, MCP-first, bring your own keys.
-- [Canonry/canonry](https://github.com/Canonry/canonry): Agent-first AEO/GEO operating platform with CLI, SQLite, and MCP.
-- [ansvisor/ansvisor](https://github.com/ansvisor/ansvisor): Visibility, citations, prompts, and competitors across eight engines, including Google AI Mode.
-- [databluedev/searchmirror](https://github.com/databluedev/searchmirror): Self-hosted rank tracker plus AI visibility monitor. AGPL-3.0.
-- [alexpospekhov/searchstack-aeo](https://github.com/alexpospekhov/searchstack-aeo): Monitor AI and search visibility from one CLI, aimed at small teams.
-- [AI2HU/gego](https://github.com/AI2HU/gego): Schedules prompts across LLMs, records web-search citations, tracks brand mentions. Go, GPL-3.0.
-- [letterstory/lettertrace](https://github.com/letterstory/lettertrace): Bring-your-own-key tracker with 95% confidence ranges on mention rates (Wilson score). MIT.
-- [geostorm-ai/geostorm](https://github.com/geostorm-ai/geostorm): Monitors how AI systems perceive and recommend your software.
-- [anyin-ai/aperture](https://github.com/anyin-ai/aperture): Self-hosted, BYOK alternative to Profound and Peec AI.
-- [hellowalt/aeo-radar](https://github.com/hellowalt/aeo-radar): AEO monitor for ChatGPT and other answer engines.
-- [aicw-io/aicw-ai-mentions](https://github.com/aicw-io/aicw-ai-mentions): Tracks how often products are mentioned in popular AI chatbots.
-- [moaljumaa/habibi](https://github.com/moaljumaa/habibi): Self-hosted AI visibility and citation tracker.
-- [IamRamgarhia/All-In-One-Free-SEO-Tool](https://github.com/IamRamgarhia/All-In-One-Free-SEO-Tool): 99-tool SEO suite including AI search visibility. MIT.
-- [craftsail/craftsail-growth](https://github.com/craftsail/craftsail-growth): GEO dashboard: AI mentions, share of voice, and AI crawler access.
-- [Citatra/Citatra](https://github.com/Citatra/Citatra): AEO/GEO platform for competitor monitoring and AI search visibility.
-- [codextde/autoseo](https://github.com/codextde/autoseo): AI SEO and GEO platform tracking mentions alongside classic SEO tools.
-- [jonradoff/llmopt](https://github.com/jonradoff/llmopt): Analyzes how LLMs and AI search engines cite brands.
-- [sharozdawa/ai-visibility](https://github.com/sharozdawa/ai-visibility): Alternative to Otterly/AthenaHQ across ChatGPT, Perplexity, Claude, Gemini.
-- [Manavarya09/citelens](https://github.com/Manavarya09/citelens): Tracks Google rankings and AI citations versus competitors.
-- [compiuta-origin/sonde-analytics](https://github.com/compiuta-origin/sonde-analytics): Self-hosted analytics on how your brand shows up in LLM answers.
-- [dipakkr/ai-seo-platform](https://github.com/dipakkr/ai-seo-platform): Tracks brand visibility across ChatGPT, Perplexity, Gemini, and Claude.
-- [melonwer/hearsay](https://github.com/melonwer/hearsay): Self-hosted tracker of how major chatbots discuss your brand, with MCP.
-- [EdgeForgeLab/OpenCiteX](https://github.com/EdgeForgeLab/OpenCiteX): GEO radar for visibility and citation rates across AI engines.
-- [rastmob/ai-visibility-tracker](https://github.com/rastmob/ai-visibility-tracker): Tracks visibility across ChatGPT, Gemini, Perplexity, Claude, and Google AI.
-- [ankit373/citegeo](https://github.com/ankit373/citegeo): Asks AI models buyer questions and stores every raw answer as evidence.
+
+- [yaojingang/GEORank](https://github.com/yaojingang/GEORank) (Self-hosted app (Next.js + FastAPI)): GEO workbench: diagnoses a site's AI-search visibility, then turns it into Q&A, 30/60/90-day action plans, keyword expansion and structured content, using your own API keys. Docker setup. README in Chinese, with an English version.
+- [ai-search-guru/getcito-worlds-first-open-source-aio-aeo-or-geo-tool](https://github.com/ai-search-guru/getcito-worlds-first-open-source-aio-aeo-or-geo-tool) (Self-hosted app (Docker)): Open-source AI visibility tracking and optimization, self-hosted with Docker Compose.
+- [elmohq/elmo](https://github.com/elmohq/elmo) (Self-hosted app (Docker)): Tracks how ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews mention, cite and describe your brand per prompt: visibility scores, share of voice, citation analysis and query fan-out. Live demo available. MIT.
+- [Albert-Weasker/niubigeo](https://github.com/Albert-Weasker/niubigeo) (Self-hosted app (Docker)): Start from a domain to see how different AI models describe your product, which competitors they name and which sources they cite, keeping the original answers as evidence. Uses your own API keys. Apache 2.0.
+- [usenotra/notra](https://github.com/usenotra/notra) (Self-hosted app (or paid cloud)): Asks ChatGPT, Claude and Gemini the questions your buyers ask: mention rates, positions and share of voice, the competitors that show up instead, and AI-written drafts to fill the gaps. Also tells AI crawler visits apart from real AI referrals. AGPL; also sold as a hosted service.
+- [oneglanse/oneglanse](https://github.com/oneglanse/oneglanse) (Self-hosted app (Docker)): Runs your prompts on the real ChatGPT, Perplexity, Gemini, Claude and Google AI Overview websites, using your own logged-in accounts rather than the APIs, then records mentions, competitors and citations. Note: automating these websites may break their terms of service, so use dedicated accounts. MIT.
+- [limelit-co/open](https://github.com/limelit-co/open) (Self-hosted app (Go)): One program with SQLite that tracks how ChatGPT, Claude, Perplexity, Gemini, Google AI Overview and AI Mode mention and cite you versus competitors, with your own API keys and a built-in MCP server. Open core of the paid Limelit service; read-only live demo.
+- [Canonry/canonry](https://github.com/Canonry/canonry) (Self-hosted app (Node)): "Agent-first" platform: track AI visibility over time, crawl your site for page health and act on the findings, from a web dashboard, the command line or your AI assistant. SQLite and your own API keys. Has a live demo.
+- [ansvisor/ansvisor](https://github.com/ansvisor/ansvisor) (Self-hosted app (Docker)): Tracks prompts, mentions, citations, competitors and AI traffic across ChatGPT, Google AI Overviews and AI Mode, Gemini, Claude, Perplexity, Copilot and Grok, turning them into tasks. Free to self-host or use the paid cloud.
+- [databluedev/searchmirror](https://github.com/databluedev/searchmirror) (Self-hosted app (Docker)): Mainly a Google rank tracker built on the paid DataBlue search API, with an extra page for checking brand mentions in AI answers using your own AI keys. AGPL.
+- [alexpospekhov/searchstack-aeo](https://github.com/alexpospekhov/searchstack-aeo) (Python tool): One command-line stack for founders: Google rankings via Search Console, keyword and backlink data (via paid DataForSEO), technical audits, plus citation checks in ChatGPT, Perplexity, Claude and Gemini's search grounding.
+- [AI2HU/gego](https://github.com/AI2HU/gego) (Self-hosted app (Go + Docker)): Schedules prompts across OpenAI, Anthropic, Google, Perplexity and local Ollama models, captures the web citations in their answers and tracks brands and keywords in a dashboard. Heavier setup (PostgreSQL, MongoDB, etcd). GPL-3.0.
+- [letterstory/lettertrace](https://github.com/letterstory/lettertrace) (Self-hosted app (Docker)): Bring-your-own-key monitor: auto-generates the questions people ask AI about your topics, runs them on schedule in Claude, ChatGPT, Gemini, Google AI Overviews and Perplexity, and reports visibility, share of voice, prominence and sentiment with confidence ranges. MIT.
+- [geostorm-ai/geostorm](https://github.com/geostorm-ai/geostorm) (Self-hosted app (Docker)): Monitors how AI models perceive and recommend your software on a schedule and alerts you when something changes, such as a new competitor appearing. One Docker command, with a demo project included. Needs an OpenRouter key. Last updated March 2026.
+- [anyin-ai/aperture](https://github.com/anyin-ai/aperture) (Self-hosted app (Docker)): Self-hosted, bring-your-own-key AI visibility monitor. ChatGPT and Perplexity are supported today; Google AI Overviews and Claude are only planned.
+- [hellowalt/aeo-radar](https://github.com/hellowalt/aeo-radar) (Self-hosted app (Node)): Tracks how often your brand shows up in ChatGPT answers, your rank and which competitors beat you. It automates the ChatGPT website, and its own README warns this may break terms of service and risk your account. Last updated April 2026.
+- [moaljumaa/habibi](https://github.com/moaljumaa/habibi) (Self-hosted app (Docker)): Runs your prompts daily in ChatGPT, Claude, Gemini and Perplexity through one OpenRouter key, several times each so you get a mention rate rather than one lucky answer, and maps which of your pages got cited for which prompt. Custom license: free to use, but you can't sell it as a hosted service.
+- [IamRamgarhia/All-In-One-Free-SEO-Tool](https://github.com/IamRamgarhia/All-In-One-Free-SEO-Tool) (Self-hosted app (Docker)): Large self-hosted SEO suite (99 tools): site audits, rank tracking, keyword research, backlinks, local SEO, client reports and AI search visibility. Can run on free AI keys (Gemini, Groq). MIT.
+- [craftsail/craftsail-growth](https://github.com/craftsail/craftsail-growth) (Self-hosted app (Go)): One program that asks ChatGPT, Claude, Gemini, Perplexity and DeepSeek your buyers' questions daily: mention rates with confidence ranges, share of voice, cited sources by type, and a ranked action plan. Includes a site audit and Search Console. AGPL.
+- [Citatra/Citatra](https://github.com/Citatra/Citatra) (Self-hosted app (Next.js)): Tracks your brand in Google AI Overviews (via the paid SerpApi service), plus competitors and sources. Not open source: its license allows non-commercial use only, and the free version is limited to one workspace. Last updated February 2026.
+- [codextde/autoseo](https://github.com/codextde/autoseo) (Self-hosted app (Docker)): AI visibility tracking across ChatGPT, Perplexity, Gemini, Claude and AI Overviews, next to a full SEO suite (keywords, rank tracking, audits, backlinks, Search Console, GA4). Can run its AI work through your existing Claude Code or Codex subscription. Paid cloud option.
+- [jonradoff/llmopt](https://github.com/jonradoff/llmopt) (Self-hosted app (Docker)): Analyzes how AI models see your brand from six angles: on-page GEO, YouTube presence, Reddit sentiment, AI search visibility, direct LLM questioning and an overall score, with the research behind each method.
+- [Manavarya09/citelens](https://github.com/Manavarya09/citelens) (Self-hosted app (Next.js)): SEO and GEO in one dashboard: tracks real AI answers in ChatGPT, Claude, Perplexity, Gemini and AI Overviews (share of voice versus competitors) alongside site audits, keywords and Google rankings, then drafts fixes.
+- [compiuta-origin/sonde-analytics](https://github.com/compiuta-origin/sonde-analytics) (Self-hosted app (Docker)): Tracks whether AI models mention your brand, how they describe it, and how you rank versus competitors. Runs with Docker Compose. AGPL. Last updated March 2026.
+- [dipakkr/ai-seo-platform](https://github.com/dipakkr/ai-seo-platform) (Self-hosted app (Docker)): Paste your URL: it works out your brand and competitors, writes 50+ buyer questions, asks ChatGPT, Perplexity, Gemini, Claude and Grok, then ranks your blind spots. Last updated March 2026.
+- [EdgeForgeLab/OpenCiteX](https://github.com/EdgeForgeLab/OpenCiteX) (Self-hosted app (Next.js)): Bring-your-own-key monitor for Perplexity, OpenAI, Gemini, DeepSeek and Qwen: mention rate, citation rate and citation rank across brand, category, competitor and scenario questions. Runs on Vercel + Supabase or Docker.
+- [rastmob/ai-visibility-tracker](https://github.com/rastmob/ai-visibility-tracker) (Self-hosted app (Next.js)): Local research workspace: save AI answers to your tracked questions (manually or automatically), check them for your brand and domain, and follow changes over time. Keeps "not checked" separate from "not mentioned".
+- [ankit373/citegeo](https://github.com/ankit373/citegeo) (Self-hosted app (Docker)): Point it at a domain: it asks the AI models you choose your buyers' questions, keeps every raw answer and shows the evidence behind each number. A missing answer is shown as missing, never as zero.
+
 ### 3b. CLI, MCP & agent-skill trackers
- 
-- [onism1767-creator/potato](https://github.com/onism1767-creator/potato): Measures how often a brand is mentioned and cited in Claude's web-search answers; runs locally.
-- [AKzar1el/mcp-geo](https://github.com/AKzar1el/mcp-geo): Tracks citations across seven AI search surfaces.
-- [khadinakbarlabs/ai-brand-monitor-mcp](https://github.com/khadinakbarlabs/ai-brand-monitor-mcp): MCP tool for mentions, share of voice, citations, and competitors.
-- [FayAndXan/xanlens](https://github.com/FayAndXan/xanlens): Asks seven AI engines whether they recognize your brand.
-- [gooseworks-ai/goose-aeo](https://github.com/gooseworks-ai/goose-aeo): AEO tracking CLI and dashboard driven by coding agents.
-- [Pupok462/open-geo](https://github.com/Pupok462/open-geo): Reads the answer a logged-in user sees by running an agent in a real browser.
-- [followanton/sleepwalker](https://github.com/followanton/sleepwalker): AI visibility data (prompts, answers, citations) via MCP, API, CLI, or app.
-- [WorkSmartAI-alt/ai-visibility-monitor](https://github.com/WorkSmartAI-alt/ai-visibility-monitor): Finds winnable buyer queries, competitor citation gaps, and content to publish next.
-- [webappski/aeo-platform](https://github.com/webappski/aeo-platform): Measures brand presence, audits AI-bot crawlability, exports a brand context for a 30-step plan.
-- [petar-nauka/ai-visibility-skill](https://github.com/petar-nauka/ai-visibility-skill): Checks whether AI assistants recommend your brand and suggests fixes.
-- [Rankfor/rankfor-open](https://github.com/Rankfor/rankfor-open): Measures brand stability and detects LLM hallucinations about your brand.
-- [Het161/CiteMind](https://github.com/Het161/CiteMind): Tracks AI citations and learns which fixes restore lost citations.
-- [optifeed/optifeed-radar](https://github.com/optifeed/optifeed-radar): CLI and MCP server checking whether AI assistants recommend your brand.
-- [DivitMittal/answerci](https://github.com/DivitMittal/answerci): CI-native LLM visibility monitoring for open-source projects and technical brands.
-- [Devansh-365/cited](https://github.com/Devansh-365/cited): One-minute check of whether ChatGPT, Perplexity, and Google AI recommend you.
-- [pixelstrunk/ai-visibility-checker](https://github.com/pixelstrunk/ai-visibility-checker): Checks if ChatGPT, Gemini, or Google AI Mode names your brand.
-- [studiomeyer-io/studiomeyer-geo](https://github.com/studiomeyer-io/studiomeyer-geo): MCP server with 30 tools across eight LLM platforms.
-- [WannabDad/aeo-brand-scan](https://github.com/WannabDad/aeo-brand-scan): Scores how AI search describes your brand versus competitors.
-- [cloro-dev/geo-tracker](https://github.com/cloro-dev/geo-tracker): Schedules prompts across engines and stores answers in your own Postgres.
-- [humanswith-ai/ai-visibility-probe-lite](https://github.com/humanswith-ai/ai-visibility-probe-lite): Dependency-free probe of mention and citation share across ChatGPT, Perplexity, Gemini.
-- [josezuma/geo-watch](https://github.com/josezuma/geo-watch): CLI that monitors brand citations in AI model outputs.
+
+- [aicw-io/aicw-ai-mentions](https://github.com/aicw-io/aicw-ai-mentions) (Node tool): Asks several AI models the same questions about a brand, product or topic and builds a local HTML report of mention rankings and cited links, with CSV export.
+- [melonwer/hearsay](https://github.com/melonwer/hearsay) (Claude skill + optional dashboard): Your AI assistant researches your product and competitors, runs a small daily panel of buyer questions, suggests page changes and tracks results over time. Can use Tavily's free search credits.
+- [onism1767-creator/potato](https://github.com/onism1767-creator/potato) (Python tool (Windows app available)): Measures how often your brand is mentioned and cited in Claude's web-search answers only, using a fixed question set so runs are comparable. Free preview mode; real runs need an Anthropic key.
+- [AKzar1el/mcp-geo](https://github.com/AKzar1el/mcp-geo) (MCP server (Node)): Lets your AI assistant track your brand's visibility across ChatGPT, Claude, Perplexity, Gemini, Grok, AI Overviews and AI Mode with your own API keys; data stays on your machine. Offers an optional paid audit.
+- [khadinakbarlabs/ai-brand-monitor-mcp](https://github.com/khadinakbarlabs/ai-brand-monitor-mcp) (MCP server (Apify-based)): Tracks mention rate, position, citations and sentiment for your brand in Perplexity, ChatGPT, Claude and Gemini from inside your AI assistant. Runs through a paid Apify service (about $0.08 per check), even when self-hosted.
+- [FayAndXan/xanlens](https://github.com/FayAndXan/xanlens) (Self-hosted app (Next.js)): Enter a URL: it detects your brand, industry and competitors, writes 30+ customer-style questions and asks seven AI models (ChatGPT, Gemini, Grok, DeepSeek, Claude, Llama, Qwen) what they know, then scores you and suggests content fixes. Paid hosted version also exists. Last updated April 2026.
+- [gooseworks-ai/goose-aeo](https://github.com/gooseworks-ai/goose-aeo) (Claude skill + Node tool): Run "/aeo" in Claude Code: it sets up your brand and competitors, asks Perplexity, ChatGPT, Gemini, Grok, Claude and DeepSeek relevant questions, analyzes mentions and gives recommendations. Data stays local in SQLite. Beta. Last updated March 2026.
+- [Pupok462/open-geo](https://github.com/Pupok462/open-geo) (Claude skill (Python)): Measures whether your brand appears in the sources, citations or text of ChatGPT, Google AI Overview, Claude, Gemini, Yandex Alice, DeepSeek and Perplexity by having an agent read the answer in your real logged-in browser, not via the APIs.
+- [WorkSmartAI-alt/ai-visibility-monitor](https://github.com/WorkSmartAI-alt/ai-visibility-monitor) (Python tool): Runs your buyer questions against ChatGPT, Claude and Perplexity, shows which sites they cite, and finds nearby questions you could realistically win, plus what content to create. About $0.30 in API costs per weekly run.
+- [webappski/aeo-platform](https://github.com/webappski/aeo-platform) (Node tool): Three commands (init, run, report) measure your brand across ChatGPT, Claude, Gemini and Perplexity through their official APIs, audit AI-bot access, and export a context file you paste into any AI for a 30-step plan. Made by an AEO agency.
+- [petar-nauka/ai-visibility-skill](https://github.com/petar-nauka/ai-visibility-skill) (Claude skill): Runs your buyers' real questions past several AI assistants, scores every answer and gives a ranked fix list. No database or account; Python standard library only. Also installable in claude.ai.
+- [Rankfor/rankfor-open](https://github.com/Rankfor/rankfor-open) (Node tool + research data): The open part of Rankfor.AI: "Dice Roller" measures whether an AI model gives the same answer when asked again, plus five research papers, seven datasets and a glossary.
+- [Het161/CiteMind](https://github.com/Het161/CiteMind) (Web app (hackathon project)): Hackathon project that tracks AI citations of your site and "remembers" every check and experiment to learn which fixes restore lost citations. Built for HackBaroda 2026, so treat it as a prototype.
+- [optifeed/optifeed-radar](https://github.com/optifeed/optifeed-radar) (Node tool + MCP): Free "audit" command scores AI readiness 0–100 with no keys; with your own keys it checks whether ChatGPT, Perplexity, Gemini and Claude recommend your brand and products versus competitors. Runs locally.
+- [DivitMittal/answerci](https://github.com/DivitMittal/answerci) (Rust tool): Tests whether changes to your README or docs improve or hurt how AI answer engines mention, cite or rank your project, like automated tests for visibility. Developer setup needed.
+- [Devansh-365/cited](https://github.com/Devansh-365/cited) (Web app (Next.js)): Enter a brand: it runs 15 category questions across ChatGPT, Perplexity and Google AI and returns a 0–100 score, the competitors recommended instead, gaps and 5 recommendations. Built for Indian D2C brands. Last updated February 2026.
+- [pixelstrunk/ai-visibility-checker](https://github.com/pixelstrunk/ai-visibility-checker) (Claude skill + Node tool): Reads your homepage, works out your market, asks whether ChatGPT, Gemini and Google AI Mode name your brand, and writes a markdown report with competitors and sources.
+- [WannabDad/aeo-brand-scan](https://github.com/WannabDad/aeo-brand-scan) (Claude skill): Give it your brand, 1–3 competitors and a category: it runs four probes on Claude, GPT and Perplexity and returns a scorecard with share of voice and the exact quotes. Promotes the paid GenPicked platform.
+- [cloro-dev/geo-tracker](https://github.com/cloro-dev/geo-tracker) (MCP server + API (deploy to Vercel)): Your AI agent schedules prompts across ChatGPT, Gemini, Copilot, Perplexity, Google AI Mode and Google Search, and every raw answer is stored in your own Postgres. No dashboard. Relies on the paid cloro API (has a free tier).
+- [humanswith-ai/ai-visibility-probe-lite](https://github.com/humanswith-ai/ai-visibility-probe-lite) (Python toolkit (manual)): Teaching toolkit, not a scanner: you paste what AI engines said, and it builds a question map and reports mention share and citation share separately. Works offline with no keys.
+- [josezuma/geo-watch](https://github.com/josezuma/geo-watch) (Python script): Script for monitoring brand citations in AI model outputs. The README is almost empty.
+
 ### 3c. Niche trackers (ecommerce, local, datasets)
- 
-- [local-falcon/mcp](https://github.com/local-falcon/mcp): Local SEO and AI visibility: geo-grid rank tracking and competitor analysis.
-- [syntropicsignal-ai/ai-visibility-audit](https://github.com/syntropicsignal-ai/ai-visibility-audit): Ecommerce: does ChatGPT, Gemini, or Google AI recommend your store or a competitor? PDF report.
-- [angeo-dev/module-aeo-brand-visibility](https://github.com/angeo-dev/module-aeo-brand-visibility): Magento 2 module scoring AI brand visibility, with dashboard and CI gate.
-- [trakkr-aisearch/ai-500](https://github.com/trakkr-aisearch/ai-500): Monthly public snapshots of global AI visibility rankings as a dataset.
-- [MohammadThabetHassan/facts-only](https://github.com/MohammadThabetHassan/facts-only): Browser extension flagging paid or planted sources in AI chatbot answers.
-- [MentionNetwork/ecommerce-ai-visibility-engine](https://github.com/MentionNetwork/ecommerce-ai-visibility-engine): Shows how AI sells your products versus the retailers it recommends.
-- [moreyiyi04-design/geo-monitor-audit](https://github.com/moreyiyi04-design/geo-monitor-audit): Comparison of Chinese GEO monitoring tools: free tiers, engines covered, disclosure gaps.
+
+- [local-falcon/mcp](https://github.com/local-falcon/mcp) (MCP server): Connects your AI assistant to the paid Local Falcon platform: local rankings on Google and Apple Maps plus AI visibility in ChatGPT, Gemini and AI Overviews, with map heatmaps. Needs a Local Falcon account.
+- [syntropicsignal-ai/ai-visibility-audit](https://github.com/syntropicsignal-ai/ai-visibility-audit) (Self-hosted app (Docker)): For online stores: checks whether ChatGPT, Gemini, Google AI Mode and AI Overviews recommend your store or a competitor for "best X" and "where to buy" questions, and produces a client-ready PDF. AGPL.
+- [angeo-dev/module-aeo-brand-visibility](https://github.com/angeo-dev/module-aeo-brand-visibility) (Magento 2 module): Asks ChatGPT, Claude, Perplexity, Gemini and Groq shopping questions several times each and scores how often your store is named, with a confidence range.
+- [trakkr-aisearch/ai-500](https://github.com/trakkr-aisearch/ai-500) (Dataset): Monthly public snapshot of the top 500 brands in Trakkr's AI visibility rankings, as JSON and CSV.
+- [MohammadThabetHassan/facts-only](https://github.com/MohammadThabetHassan/facts-only) (Browser extension + web app): The other side of GEO: checks a chatbot's answer claim by claim, searches for independent evidence and flags sources that look paid or planted to sway AI answers.
+- [moreyiyi04-design/geo-monitor-audit](https://github.com/moreyiyi04-design/geo-monitor-audit) (Research report): Checks 20 Chinese GEO monitoring vendors and finds none disclose the details needed to trust their numbers. It also shows AI answers change a lot day to day even when you do nothing. Mostly in Chinese.
+
 ---
- 
+
 ## Bonus: All-in-one suites & skill packs (span all three categories)
- 
-- [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills): Marketing skills for Claude Code and AI agents, including SEO and analytics.
-- [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo): SEO skill for Claude Code with 25 sub-skills, including schema and GEO/AEO.
-- [Ryze-AI-Adgent/open-seo-mcp-skills](https://github.com/Ryze-AI-Adgent/open-seo-mcp-skills): Free SEO MCP server plus SEO/GEO skills, including AI visibility.
-- [aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills): 120 marketing skills across seven disciplines, including SEO/GEO.
-- [indranilbanerjee/digital-marketing-pro](https://github.com/indranilbanerjee/digital-marketing-pro): AI marketing system spanning SEO, AEO/GEO, content, and analytics.
-- [AgriciDaniel/codex-seo](https://github.com/AgriciDaniel/codex-seo): Codex-first SEO suite: 26 workflows, GEO/AEO, schema.
-- [aigclink/geolook](https://github.com/aigclink/geolook): End-to-end GEO: analysis, diagnosis, strategy, tickets, execution, verification.
-- [leopard627/fire-your-seo-agency](https://github.com/leopard627/fire-your-seo-agency): Claude Code skill for SEO, AEO, GEO, LLMO, and Naver search.
-- [unifapi-agent/agents](https://github.com/unifapi-agent/agents): Marketing agents over MCP: SEO audits, GEO/AI visibility, competitive intel.
-- [ViryaZheng/recomby-geo](https://github.com/ViryaZheng/recomby-geo): GEO "AI employee" stack: skills package plus curated agents and CLIs. MIT.
-- [alirezarezvani/claude-code-aso-skill](https://github.com/alirezarezvani/claude-code-aso-skill): AEO automation framework for Claude Code with sub-agents.
-- [beyondtahir/beyondseo](https://github.com/beyondtahir/beyondseo): Python SEO platform covering crawling, SEO/AEO/GEO, and competitors.
-- [seranking/seo-skills](https://github.com/seranking/seo-skills): Claude skills for the SE Ranking MCP server, including AI search share of voice.
-- [Infrasity-Labs/dev-gtm-claude-skills](https://github.com/Infrasity-Labs/dev-gtm-claude-skills): GEO and AI-discoverability skills for developer-focused companies.
-- [AkashPriyadarshii/jev-seo](https://github.com/AkashPriyadarshii/jev-seo): Rust SEO/GEO toolkit: audits, crawls, AI citation checks, MCP server.
-- [akii-technologies-ltd/akii-seo-ai-search-optimizer](https://github.com/akii-technologies-ltd/akii-seo-ai-search-optimizer): Claude Code plugin: audits, schema generation, AI visibility tracking.
-- [Hainrixz/claude-seo-ai](https://github.com/Hainrixz/claude-seo-ai): Two-score audit (search + AI) with an opt-in fixer.
+
+- [zubair-trabzada/geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude) (Claude skills): "GEO-first" SEO suite for Claude Code: full site audits, AI citability scoring, schema, technical checks and client-ready reports, including a white-label option.
+- [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) (Claude skills): Popular library of marketing skills for AI agents (copywriting, conversion, pricing and more), including "ai-seo", "seo-audit", "schema" and "programmatic-seo" skills. Not GEO-specific.
+- [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) (Claude Code plugin): Full SEO audit plugin with 26 sub-skills and 19 specialist agents running in parallel, AI-search first: citability scoring, llms.txt and schema, technical SEO and E-E-A-T.
+- [Ryze-AI-Adgent/open-seo-mcp-skills](https://github.com/Ryze-AI-Adgent/open-seo-mcp-skills) (Claude skills + hosted connector): Free SEO and GEO skills for Claude that pull real data from your Google Search Console, GA4 and Ads through the Ryze connector. The skills are open; the connector is Ryze's hosted service.
+- [aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills) (Claude skills): 120 marketing skills across seven areas, including a 16-skill SEO/GEO set with content-quality and domain-authority checks. Apache 2.0.
+- [indranilbanerjee/digital-marketing-pro](https://github.com/indranilbanerjee/digital-marketing-pro) (Claude plugin): Large marketing plugin (164 skills, 24 agents) for agencies running many brands: strategy, SEO and AEO/GEO, paid media, content and reporting.
+- [aigclink/geolook](https://github.com/aigclink/geolook) (Self-hosted app + skill): End-to-end GEO in one dashboard: samples answers from 17 AI engines (10 automatically, including Chinese ones), audits the site, diagnoses gaps, creates fix tickets with acceptance criteria and checks before/after results. Live demo; README in English, Chinese and Japanese.
+- [leopard627/fire-your-seo-agency](https://github.com/leopard627/fire-your-seo-agency) (Claude skill): Audits your site, fixes what's broken and measures results across five "lanes" of search, including Google, AI answer engines and Korea's Naver. Built from the author's own case study.
+- [unifapi-agent/agents](https://github.com/unifapi-agent/agents) (Claude skills + hosted connector): Marketing skills (SEO audits, GEO and AI visibility, local SEO, competitor intelligence) that run on UnifAPI's hosted data connector. The skills are open; the data service uses paid credits after a free trial.
+- [ViryaZheng/recomby-geo](https://github.com/ViryaZheng/recomby-geo) (Claude skills): GEO skills package plus a 7-stage workflow for using an AI agent as a "GEO employee" alongside your team, with lists of agent and office tools. Alpha; README mainly in Chinese, with an English version.
+- [beyondtahir/beyondseo](https://github.com/beyondtahir/beyondseo) (Claude skill + Python crawler): Complete SEO toolkit with its own crawler: audits up to 15 priority pages at a time, competitor research, backlink planning, SEO/AEO/GEO guidance and branded reports. No paid SEO API required.
+- [seranking/seo-skills](https://github.com/seranking/seo-skills) (Claude skills): 26 SEO skills (content briefs, audits, backlink gaps, keyword clusters, AI search share of voice and more) built for SE Ranking's paid data connector, but every data call is documented so you can adapt them.
+- [Infrasity-Labs/dev-gtm-claude-skills](https://github.com/Infrasity-Labs/dev-gtm-claude-skills) (Claude skills): For developer-tool companies: audits documentation for SEO and AI discoverability (33 checks), scores API docs, checks robots.txt and llms.txt, and runs developer-marketing workflows.
+- [AkashPriyadarshii/jev-seo](https://github.com/AkashPriyadarshii/jev-seo) (Rust CLI + MCP): Free SEO and GEO command-line suite and MCP server: search result checks, file audits, JSON-LD validation, AI crawler checks in robots.txt, content briefs and rank tracking in a local database. Gets search results by scraping DuckDuckGo. MIT.
+- [akii-technologies-ltd/akii-seo-ai-search-optimizer](https://github.com/akii-technologies-ltd/akii-seo-ai-search-optimizer) (Claude Code plugin): Audits, content plans, page optimization, schema and keyword clustering, aligned with Google's AI search guidance. Note: its "AI Visibility Score" is an estimate made by Akii's own backend, not live AI answers.
+- [Hainrixz/claude-seo-ai](https://github.com/Hainrixz/claude-seo-ai) (Claude Code plugin): Audits a site on two separate scores, classic SEO and AI visibility, never blended, and can apply safe fixes after you approve each one. Works offline with no keys.
+
 ## Bonus: Curated lists, guides & playbooks
- 
-- [amplifying-ai/awesome-generative-engine-optimization](https://github.com/amplifying-ai/awesome-generative-engine-optimization): Guides, tools, and research.
-- [luka2chat/awesome-geo](https://github.com/luka2chat/awesome-geo): General GEO resources.
-- [izak-fisher/generative-engine-optimization-tools](https://github.com/izak-fisher/generative-engine-optimization-tools): GEO tools list.
-- [discoveredlabs/awesome-aeo-seo](https://github.com/discoveredlabs/awesome-aeo-seo): AEO and SEO resources for engineers and growth teams.
-- [AgriciDaniel/flow](https://github.com/AgriciDaniel/flow): Evidence-led SEO playbook for AI search, with sourced statistics.
-- [RankSpotAI/awesome-geo-tools](https://github.com/RankSpotAI/awesome-geo-tools): Tools compared by engines tracked, refresh rate, cost, and data export.
-- [TraceCohenTech/ai-seo-playbook](https://github.com/TraceCohenTech/ai-seo-playbook): SEO and GEO/AEO playbook with tested scripts and measurement method.
-- [LLM-X-Factorer/awesome-geo-cn](https://github.com/LLM-X-Factorer/awesome-geo-cn): Chinese-language GEO resources for domestic AI search platforms.
-- [alternbits/awesome-ai-visibility](https://github.com/alternbits/awesome-ai-visibility): AI visibility marketing tools.
-- [cloudapp-dev/awesome-open-geo](https://github.com/cloudapp-dev/awesome-open-geo): Only free, self-hostable GEO tools — a great companion to this list.
-- [JingHao-Leon/geo-book](https://github.com/JingHao-Leon/geo-book): Chinese GEO handbook from hands-on testing across six domestic AI engines.
-- [elmohq/awesome-answer-engine-optimization](https://github.com/elmohq/awesome-answer-engine-optimization): AEO/GEO docs, crawler user agents, specs, research.
-- [josezuma/awesome-ai-visibility](https://github.com/josezuma/awesome-ai-visibility): AI visibility, GEO, and AEO resources.
-- [DavidHuji/Awesome-GEO](https://github.com/DavidHuji/Awesome-GEO): Research-paper focused GEO list.
+
+- [amplifying-ai/awesome-generative-engine-optimization](https://github.com/amplifying-ai/awesome-generative-engine-optimization) (Reading list): Large curated list: guides, case studies, tools, research, monitoring, newsletters and communities. Mostly links to articles and paid tools. Last updated April 2026.
+- [luka2chat/awesome-geo](https://github.com/luka2chat/awesome-geo) (Reading list): Curated GEO resources in English and Chinese: papers, tools, strategies, case studies and a GEO checklist. Very active.
+- [izak-fisher/generative-engine-optimization-tools](https://github.com/izak-fisher/generative-engine-optimization-tools) (Reading list): Alphabetical list of (mostly paid) GEO tracking tools with short descriptions. Last updated January 2026.
+- [discoveredlabs/awesome-aeo-seo](https://github.com/discoveredlabs/awesome-aeo-seo) (Reading list): Technical reading list: how ChatGPT, AI Overviews, AI Mode and Gemini retrieve and pick sources, plus research, measurement and open-source tools.
+- [AgriciDaniel/flow](https://github.com/AgriciDaniel/flow) (Playbook): Evidence-led SEO knowledge base for the AI-search era (Google, AI Overviews, LLM citations, local), where every claim has a dated source and unverifiable claims were dropped. Last updated April 2026.
+- [RankSpotAI/awesome-geo-tools](https://github.com/RankSpotAI/awesome-geo-tools) (Comparison list): GEO tools compared in a table: which engines each tracks, how often it refreshes, what it costs and whether you can export data. Maintained by RankSpot, a GEO tool itself (disclosed).
+- [TraceCohenTech/ai-seo-playbook](https://github.com/TraceCohenTech/ai-seo-playbook) (Playbook + scripts): Methodology, scripts and guardrails behind a site that grew to 11M impressions in 90 days. Strong on measuring against control pages, so you can tell real wins from noise.
+- [LLM-X-Factorer/awesome-geo-cn](https://github.com/LLM-X-Factorer/awesome-geo-cn) (Reading list): Chinese-language GEO resources focused on China's AI search (Doubao, Yuanbao, Qwen, ERNIE, Kimi, DeepSeek) and content platforms.
+- [alternbits/awesome-ai-visibility](https://github.com/alternbits/awesome-ai-visibility) (Reading list): Resources for measuring AI visibility: research, official platform docs, measurement methods, open-source and paid tools.
+- [cloudapp-dev/awesome-open-geo](https://github.com/cloudapp-dev/awesome-open-geo) (Reading list): Only free tools with real open-source licenses, sorted by job: standards, audits, monitoring, llms.txt, plugins, crawler logs, agent skills and research. A strong companion to this list.
+- [JingHao-Leon/geo-book](https://github.com/JingHao-Leon/geo-book) (Book (Chinese)): Free Chinese book (about 60,000 characters) from SEO to GEO, based on live tests of six Chinese AI engines. Readable online.
+- [elmohq/awesome-answer-engine-optimization](https://github.com/elmohq/awesome-answer-engine-optimization) (Reading list): Official documentation from each AI engine, the user agents of every AI crawler (training, search, user-triggered), specifications and tools. Very handy for robots.txt decisions.
+- [josezuma/awesome-ai-visibility](https://github.com/josezuma/awesome-ai-visibility) (Reading list): Curated AI visibility resources by the author of the josezuma repos in this list. Published by BrandVirality, an AI visibility company.
+- [DavidHuji/Awesome-GEO](https://github.com/DavidHuji/Awesome-GEO) (Reading list): Research-paper list for GEO by year, including attack and manipulation papers.
