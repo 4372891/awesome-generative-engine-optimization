@@ -6,8 +6,6 @@ A curated directory of open-source GEO tools. Built specifically for startups, c
 
 Every entry was checked against the repository itself (README, files, license and last update) on October 14, 2026. 
 
-"Last updated" is shown only for repos with no changes since before May 2026.
-
 ## 1. Technical GEO & Ingestion Infrastructure
 
 ### 1a. AI crawler access & bot rules
