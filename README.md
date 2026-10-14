@@ -1,4 +1,6 @@
-# Technical GEO Audit Toolkit
+# Awesome Technical Generative Engine Optimization - Open Source Technical GEO Audit Toolkit [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) 🚀
+
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 
 Open-source tools for running technical GEO audits on websites. Every tool here:
 
